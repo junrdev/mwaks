@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item
+        android:id="@+id/download"
+        android:icon="@drawable/baseline_expand_circle_down_24"
+        android:title="Download"
+        app:iconTint="@color/rich_black" />
+
+    <item
+        android:id="@+id/account"
+        android:icon="@drawable/account_circle_24"
+        android:title="Account"
+        app:iconTint="@color/rich_black" />
+
+    <item
+        android:id="@+id/upload"
+        android:icon="@drawable/round_upload_24"
+        android:title="Upload"
+        app:iconTint="@color/rich_black" />
+</menu>
