@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="honey_dew">#FFD5F2E3</color>
+    <color name="light_cyan">#FFDDFDFE</color>
+    <color name="beaver">#FFAB947E</color>
+    <color name="rich_black">#FF0D1821</color>
+    <color name="baby_powder">#FFF0F4EF</color>
 </resources>
