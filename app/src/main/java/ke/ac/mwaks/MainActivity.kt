@@ -1,10 +1,15 @@
 package ke.ac.mwaks
 
+import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ke.ac.mwaks.adapter.ViewPagerAdapter
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,15 +19,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        //transparent status bar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            val window = getWindow()
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.statusBarColor = Color.TRANSPARENT
+        }
+
         val pagerAdapter = ViewPagerAdapter(this)
 
         viewPager2 = findViewById(R.id.homePager)
-
-        viewPager2.let {
-            it.isHorizontalScrollBarEnabled = false
-            it.isVerticalScrollBarEnabled = false
-            it.adapter = pagerAdapter
-        }
+        viewPager2.adapter = pagerAdapter
 
 
         bottomNavigationView = findViewById(R.id.homeBottomNavigation)
@@ -34,7 +43,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.account -> viewPager2.currentItem = 1
                 R.id.upload -> viewPager2.currentItem = 2
             }
-            true
         }
 
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {

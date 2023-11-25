@@ -16,6 +16,7 @@ class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
     override fun createFragment(position: Int): Fragment = when (position){
         0 -> Downloads()
         1 -> Account_activity()
-        else -> Uploads()
+        2 -> Uploads()
+        else -> throw IllegalStateException("Unable to parse route.")
     }
 }
