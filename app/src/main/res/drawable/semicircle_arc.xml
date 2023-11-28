@@ -1,0 +1,14 @@
+<!-- res/drawable/semi_circle_shape.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:innerRadiusRatio="2.5"
+    android:shape="ring"
+    android:thicknessRatio="20"
+    android:useLevel="true"
+    android:visible="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <solid android:color="@color/blue_tint" /> <!-- Fill color for the semi-circle -->
+    <stroke
+        android:width="5dp"
+        android:color="@color/orange_tint" />
+</shape>
