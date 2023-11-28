@@ -1,14 +1,328 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.Uploads">
+    android:layout_height="wrap_content"
+    android:background="@color/light_bg"
+    tools:context=".fragments.Uploads"
+    android:nestedScrollingEnabled="true"
+    android:scrollbars="horizontal"
+    app:layout_scrollEffect="compress"
+    android:layout_marginBottom="10dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <View
+            android:id="@+id/spacer"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true" />
+
+        <TextView
+            android:id="@+id/cat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/spacer"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:text="Categories"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+        <LinearLayout
+            android:id="@+id/cards"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:layout_below="@id/cat">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imageUpload"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="20dp"
+                android:background="@drawable/top_rounded_shape"
+                app:cardCornerRadius="15dp">
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="190dp"
+                    android:layout_alignParentStart="true"
+                    android:cropToPadding="true"
+                    android:src="@drawable/imagefile" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.5"
+                    android:background="@color/black">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/centerLine"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Upload Image Content"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/centerLine"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@color/light_cyan"
+                        android:text=" " />
+
+                    <TextView
+                        android:id="@+id/content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/centerLine"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:maxWidth="200dp"
+                        android:text="All Image files supported from Jpeg, PnG and webp."
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+
+                    <ImageView
+                        android:id="@+id/addIcon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="3dp"
+                        android:src="@drawable/round_arrow_forward_ios_24"
+                        app:tint="@color/white" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/fileUpload"
+                android:layout_width="355dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="20dp"
+                android:background="@drawable/top_rounded_shape"
+                app:cardCornerRadius="15dp">
+
+                <ImageView
+                    android:id="@+id/upload"
+                    android:layout_width="match_parent"
+                    android:layout_height="239dp"
+                    android:layout_alignParentStart="true"
+                    android:cropToPadding="true"
+                    android:src="@drawable/upload_file" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.5"
+                    android:background="@color/black">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/centerLine2"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Upload Files"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/centerLine2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@color/light_cyan"
+                        android:text=" " />
+
+                    <TextView
+                        android:id="@+id/content2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/centerLine2"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:maxWidth="200dp"
+                        android:text="File formats supported. That is, Pdf, Docx. e.t.c."
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+
+                    <ImageView
+                        android:id="@+id/addIcon2"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/content2"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="3dp"
+                        android:src="@drawable/round_arrow_forward_ios_24"
+                        app:tint="@color/white" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/openCamera"
+                android:layout_width="362dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="20dp"
+                android:background="@drawable/top_rounded_shape"
+                app:cardCornerRadius="15dp"
+                android:onClick="openImagePicker">
+
+                <ImageView
+                    android:id="@+id/image3"
+                    android:layout_width="match_parent"
+                    android:layout_height="204dp"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/scanfile" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.5"
+                    android:background="@color/black">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/centerLine3"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Open Camera"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/centerLine3"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@color/light_cyan"
+                        android:text=" " />
+
+                    <TextView
+                        android:id="@+id/content3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/centerLine3"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:maxWidth="200dp"
+                        android:text="Scanning documents Out the box"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+
+                    <ImageView
+                        android:id="@+id/addIcon3"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/content3"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="3dp"
+                        android:src="@drawable/round_arrow_forward_ios_24"
+                        app:tint="@color/white" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_below="@id/cards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:text="Selected files"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:id="@+id/title3"
+            android:layout_marginBottom="25dp"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="250dp"
+            android:layout_below="@id/title3"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="10dp"
+            tools:listitem="@layout/recent_search_item"
+            tools:itemCount="5"
+            android:id="@+id/selectedFilesRecycler"
+            />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/uploadButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/selectedFilesRecycler"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            app:cardBackgroundColor="@color/btn_primary"
+            app:cardCornerRadius="15dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Upload"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_below="@id/uploadButton"
+            />
+
+    </RelativeLayout>
+
+</ScrollView>

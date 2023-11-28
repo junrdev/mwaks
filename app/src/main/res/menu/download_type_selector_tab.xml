@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/documentFomart"
+        android:icon="@drawable/round_insert_drive_file_24"
+        android:title="PDF"
+        android:iconTint="@color/rich_black"
+        />
+
+    <item android:id="@+id/imageFomart"
+        android:icon="@drawable/round_image_24"
+        android:title="Image"
+        android:iconTint="@color/rich_black"
+        />
+
+</menu>
