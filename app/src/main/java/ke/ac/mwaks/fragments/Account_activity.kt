@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Recycler
 import ke.ac.mwaks.R
 
 class Account_activity : Fragment() {
 
-    private lateinit var uploads : TextView
-    private lateinit var downloads : TextView
-    private lateinit var conversion : TextView
 
+    private lateinit var toolsRecycler :RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -25,11 +26,6 @@ class Account_activity : Fragment() {
     ): View? {
 
          val view = inflater.inflate(R.layout.fragment_account_activity, container, false)
-
-
-            uploads = view.findViewById(R.id.userUploads)
-            downloads = view.findViewById(R.id.userDownloads)
-            conversion = view.findViewById(R.id.conversionRate)
 
 
         //initialize fields

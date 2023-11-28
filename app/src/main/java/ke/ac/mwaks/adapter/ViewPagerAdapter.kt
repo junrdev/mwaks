@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ke.ac.mwaks.fragments.Account_activity
 import ke.ac.mwaks.fragments.Downloads
+import ke.ac.mwaks.fragments.OnBoarding
 import ke.ac.mwaks.fragments.Uploads
 
 class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
@@ -15,7 +16,13 @@ class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
 
     override fun createFragment(position: Int): Fragment = when (position){
         0 -> Downloads()
-        1 -> Account_activity()
+
+        //check if user is logged in or not
+        //if not load on boarding
+//        1 -> Account_activity()
+        1 -> OnBoarding()
+
+        //when user clicks any item and not logged in// prompt for login
         2 -> Uploads()
         else -> throw IllegalStateException("Unable to parse route.")
     }

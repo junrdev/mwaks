@@ -34,7 +34,7 @@
                 android:progress="64"
                 android:progressDrawable="@drawable/semicircle_arc"
                 android:progressTint="@color/coming_soon_tint"
-                app:progressBackgroundTint="@color/btn_primary" />
+                android:progressBackgroundTint="@color/btn_primary" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
