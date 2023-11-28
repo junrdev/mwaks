@@ -5,29 +5,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/beaver"
-    tools:context=".MainActivity"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@color/rich_black"-->
-<!--        android:theme="@style/ThemeOverlay.AppCompat.Dark" />-->
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="5dp"
+        android:id="@+id/mainToolBar"
+        >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/round_notes_24"
+                    app:tint="@color/rich_black" />
+
+                <ImageView
+                    android:id="@+id/profilePic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="profile picture"
+                    tools:src="@drawable/round_notes_24" />
+            </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/homePager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-         />
-    
+        android:layout_height="match_parent" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/homeBottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/bottom_nav_menu"
+        android:layout_height="70dp"
         android:layout_gravity="bottom"
         android:background="@color/honey_dew"
         android:padding="5dp"
-        android:id="@+id/homeBottomNavigation"
-        />
+        app:layout_anchorGravity="bottom"
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

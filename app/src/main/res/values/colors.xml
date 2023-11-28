@@ -8,5 +8,13 @@
     <color name="beaver">#FFAB947E</color>
     <color name="rich_black">#FF0D1821</color>
     <color name="baby_powder">#FFF0F4EF</color>
-    <color name="transparent">#00F0F4EF</color>
+    <color name="transparent">#E3000000</color>
+
+    <color name="light_bg">#FFF5F7FC</color>
+    <color name="btn_primary">#FF388E3C</color>
+    <color name="light_grey">#FFECEEF8</color>
+    <color name="orange_tint">#E64A19</color>
+    <color name="blue_tint">#1976D2</color>
+    <color name="purple_tint">#512DA8</color>
+    <color name="coming_soon_tint">#FCE4EC</color>
 </resources>
