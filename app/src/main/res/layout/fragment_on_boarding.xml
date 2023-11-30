@@ -13,14 +13,14 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/tabView"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/spacer"
-        android:layout_margin="20dp"
-        app:cardCornerRadius="40dp"
-        android:layout_centerInParent="true">
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/tabView"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/spacer"-->
+<!--        android:layout_margin="20dp"-->
+<!--        app:cardCornerRadius="40dp"-->
+<!--        android:layout_centerInParent="true">-->
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/loginSignUpTab"
@@ -28,15 +28,16 @@
             android:layout_height="wrap_content"
             android:elevation="6dp"
             android:padding="10dp"
+            android:layout_below="@id/spacer"
             app:tabBackground="@color/honey_dew"
             />
-    </androidx.cardview.widget.CardView>
+<!--    </androidx.cardview.widget.CardView>-->
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/loginSignUpPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tabView"
+        android:layout_below="@id/loginSignUpTab"
         />
 
 </RelativeLayout>

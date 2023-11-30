@@ -9,33 +9,34 @@
     tools:context=".MainActivity">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/mainToolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="5dp"
-        android:id="@+id/mainToolBar"
-        >
+        android:elevation="5dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            >
 
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/round_notes_24"
-                    app:tint="@color/rich_black" />
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/round_notes_24"
+                app:tint="@color/rich_black" />
 
-                <ImageView
-                    android:id="@+id/profilePic"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="10dp"
-                    android:contentDescription="profile picture"
-                    tools:src="@drawable/round_notes_24" />
-            </RelativeLayout>
+            <ImageView
+                android:id="@+id/profilePic"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="profile picture"
+                tools:src="@drawable/round_notes_24" />
+        </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>
 

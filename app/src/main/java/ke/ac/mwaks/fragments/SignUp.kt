@@ -23,6 +23,7 @@ class SignUp : Fragment() {
     private lateinit var msignUpSelectImage: ImageView
     private lateinit var mselectedImage: ImageView
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }

@@ -15,7 +15,7 @@
             android:id="@+id/dots"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="18dp"
             android:layout_marginEnd="15dp"
             android:orientation="vertical">
 
@@ -78,40 +78,35 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/topPart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/dots"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
 
             <TextView
-
                 android:id="@+id/listItemText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:maxWidth="200dp"
-                android:textSize="15sp"
+                android:layout_marginStart="15dp"
+                android:textSize="20sp"
                 tools:text="this is some dummy text.It is supposedd to spans multiple lines" />
 
             <ImageView
                 android:id="@+id/listItemRemove"
                 android:layout_width="30dp"
+                android:layout_centerVertical="true"
                 android:layout_height="30dp"
-                android:layout_gravity="end"
-                android:layout_marginStart="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
                 android:src="@drawable/round_clear_24" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_below="@id/topPart"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
-            android:background="@color/coming_soon_tint" />
 
 
     </RelativeLayout>

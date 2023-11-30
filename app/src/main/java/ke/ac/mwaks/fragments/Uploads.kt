@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.hardware.camera2.CaptureRequest
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,9 +15,11 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ke.ac.mwaks.R
 import ke.ac.mwaks.adapter.RecyclerItemWithRemoveOption
+import ke.ac.mwaks.model.ListItemWithRemoveOption
 import ke.ac.mwaks.util.Methods
 import java.security.Permissions
 
@@ -77,10 +80,26 @@ class Uploads : Fragment() {
                 Methods.openFilePicker(requireActivity())
         }
 
-        val adapter = RecyclerItemWithRemoveOption()
+        val adapter = RecyclerItemWithRemoveOption(
+            items = mutableListOf(
+                ListItemWithRemoveOption(1, "Hello You searched me recently"),
+                ListItemWithRemoveOption(2, "Hello me"),
+                ListItemWithRemoveOption(3, "Hello"),
+                ListItemWithRemoveOption(4, "Hello")
+            )
+        )
         mselectedFilesRecycler.adapter = adapter
+        mselectedFilesRecycler.layoutManager = LinearLayoutManager(
+            requireActivity().applicationContext,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+
         // Inflate the layout for this fragment
         return view
+    }
+
+    fun captureImage() {
     }
 
 
@@ -101,6 +120,8 @@ class Uploads : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        Log.d(TAG, "onActivityResult: req : $requestCode, data : $data")
 
     }
 

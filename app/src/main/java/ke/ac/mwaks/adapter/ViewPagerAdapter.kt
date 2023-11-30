@@ -15,12 +15,11 @@ class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
     }
 
     override fun createFragment(position: Int): Fragment = when (position){
-        0 -> Downloads()
+        0 -> Account_activity()
 
         //check if user is logged in or not
         //if not load on boarding
-//        1 -> Account_activity()
-        1 -> OnBoarding()
+        1 -> Downloads()
 
         //when user clicks any item and not logged in// prompt for login
         2 -> Uploads()

@@ -10,24 +10,17 @@ import androidx.recyclerview.widget.RecyclerView
 import ke.ac.mwaks.R
 import ke.ac.mwaks.model.ListItemWithRemoveOption
 
-class RecyclerItemWithRemoveOption :
+class RecyclerItemWithRemoveOption(val items: MutableList<ListItemWithRemoveOption>) :
     RecyclerView.Adapter<RecyclerItemWithRemoveOption.RecyclerItemWithRemoveViewHolder>() {
 
     private val TAG = "RecyclerItemWithRemoveO"
-
-    val items = mutableListOf(
-        ListItemWithRemoveOption(1, "Hello"),
-        ListItemWithRemoveOption(2, "Hello"),
-        ListItemWithRemoveOption(3, "Hello"),
-        ListItemWithRemoveOption(4, "Hello")
-    )
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): RecyclerItemWithRemoveViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.recent_search_item, parent, false)
+            LayoutInflater.from(parent.context.applicationContext).inflate(R.layout.recent_search_item, parent, false)
         return RecyclerItemWithRemoveViewHolder(view)
     }
 
@@ -38,7 +31,7 @@ class RecyclerItemWithRemoveOption :
     override fun onBindViewHolder(holder: RecyclerItemWithRemoveViewHolder, position: Int) {
         holder.bind(items[position]) {
             Log.d(TAG, "onBindViewHolder: $position")
-//            items.removeAt(position)
+            items.removeAt(position)
         }
     }
 

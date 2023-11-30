@@ -22,7 +22,7 @@ object Methods {
 
     fun openImagePicker(fragmentActivity: FragmentActivity){
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.type = "image/*"
+        intent.setDataAndType( null,"image/*")
         fragmentActivity.startActivityForResult(intent, IMAGE_PICK_CODE)
     }
 

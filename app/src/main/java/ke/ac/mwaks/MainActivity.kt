@@ -6,18 +6,27 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseUser
 import ke.ac.mwaks.adapter.ViewPagerAdapter
+import ke.ac.mwaks.model.AppUser
 import ke.ac.mwaks.util.Methods
+import ke.ac.mwaks.viewmodel.AuthScreensViewModel
+import kotlinx.coroutines.Dispatchers
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +36,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var toolbar: Toolbar
 
-    //    private lateinit var
+    private val authScreensViewModel  = AuthScreensViewModel()
+
+    private val TAG = "MainActivity"
+    private lateinit var user : FirebaseUser
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,13 +48,24 @@ class MainActivity : AppCompatActivity() {
 
         toolbar = findViewById(R.id.mainToolBar)
         setSupportActionBar(toolbar)
+        requirePermissions()
+
 
         imageView = findViewById(R.id.profilePic)
+
+        runOnUiThread { authScreensViewModel.updateLoginStatus() }
+
+        if (authScreensViewModel.uiState.value.isLoggedIn){
+            user = authScreensViewModel.uiState.value.auth.currentUser!!
+        }
+
 
         Glide.with(this)
             .load("https://firebasestorage.googleapis.com/v0/b/mwaks-api.appspot.com/o/admin%2F2023-04-16-22-53-49-373.jpg?alt=media&token=61c130f4-aaac-4295-8ab8-bb58aaa5ab88")
             .transform(CircleCrop())
             .into(imageView)
+
+        Log.d(TAG, "onCreate: ${authScreensViewModel.TAG}")
 
         //transparent status bar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
