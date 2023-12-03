@@ -18,7 +18,7 @@ object Methods {
     const val FILES_PERMISSION_CODE = 123
     const val All_PERMISSION_CODE = 125
     const val REQUEST_IMAGE_CAPTURE = 102
-
+    const val ADMIN_IMAGE_URL = "https://firebasestorage.googleapis.com/v0/b/mwaks-api.appspot.com/o/admin%2F2023-04-16-22-53-49-373.jpg?alt=media&token=61c130f4-aaac-4295-8ab8-bb58aaa5ab88"
     fun openImagePicker(fragmentActivity: FragmentActivity){
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.setDataAndType( null,"image/*")

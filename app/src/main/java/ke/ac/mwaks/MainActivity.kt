@@ -2,6 +2,7 @@ package ke.ac.mwaks
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
@@ -24,22 +25,24 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseUser
 import ke.ac.mwaks.adapter.ViewPagerAdapter
 import ke.ac.mwaks.model.AppUser
+import ke.ac.mwaks.util.FragmentButtonToActivityClickListener
 import ke.ac.mwaks.util.Methods
 import ke.ac.mwaks.viewmodel.AuthScreensViewModel
+import ke.ac.mwaks.views.LoginSignUp
 import kotlinx.coroutines.Dispatchers
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FragmentButtonToActivityClickListener {
 
     private lateinit var viewPager2: ViewPager2
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var imageView: ImageView
     private lateinit var toolbar: Toolbar
 
-    private val authScreensViewModel  = AuthScreensViewModel()
+    private val authScreensViewModel = AuthScreensViewModel()
 
     private val TAG = "MainActivity"
-    private lateinit var user : FirebaseUser
+    private lateinit var user: FirebaseUser
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,13 +58,13 @@ class MainActivity : AppCompatActivity() {
 
         runOnUiThread { authScreensViewModel.updateLoginStatus() }
 
-        if (authScreensViewModel.uiState.value.isLoggedIn){
+        if (authScreensViewModel.uiState.value.isLoggedIn) {
             user = authScreensViewModel.uiState.value.auth.currentUser!!
         }
 
 
         Glide.with(this)
-            .load("https://firebasestorage.googleapis.com/v0/b/mwaks-api.appspot.com/o/admin%2F2023-04-16-22-53-49-373.jpg?alt=media&token=61c130f4-aaac-4295-8ab8-bb58aaa5ab88")
+            .load(Methods.ADMIN_IMAGE_URL)
             .transform(CircleCrop())
             .into(imageView)
 
@@ -145,5 +148,11 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(Manifest.permission.CAMERA),
                 Methods.FILES_PERMISSION_CODE
             )
+    }
+
+    override fun onButtonClicked() {
+        val intent = Intent(this, LoginSignUp::class.java)
+        startActivity(intent)
+        finish()
     }
 }

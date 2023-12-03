@@ -1,15 +1,19 @@
 package ke.ac.mwaks.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import ke.ac.mwaks.R
+import ke.ac.mwaks.util.FragmentButtonToActivityClickListener
 
 class Account_activity : Fragment() {
 
@@ -19,10 +23,12 @@ class Account_activity : Fragment() {
     private lateinit var mlockOthers: RelativeLayout
     private lateinit var munlockFunctionalitiesBtn: CardView
 
-    private lateinit var toolsRecycler: RecyclerView
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private lateinit var fragmentButtonToActivityClickListener: FragmentButtonToActivityClickListener
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is FragmentButtonToActivityClickListener)
+            fragmentButtonToActivityClickListener = context
     }
 
     override fun onCreateView(
@@ -36,12 +42,30 @@ class Account_activity : Fragment() {
         mlockaccountSummary = view.findViewById(R.id.lockaccountSummary)
         mlockOthers = view.findViewById(R.id.lockOthers)
         munlockFunctionalitiesBtn = view.findViewById(R.id.unlockFunctionalitiesBtn)
+        val demoMode =
+            requireActivity().getSharedPreferences("appmode", AppCompatActivity.MODE_PRIVATE)
+                .getString("demomode", "true")
 
-        mlockUploads.setOnClickListener { showOpenAccountToast() }
-        mlockDownloads.setOnClickListener { showOpenAccountToast() }
-        mlockaccountSummary.setOnClickListener { showOpenAccountToast() }
-        mlockOthers.setOnClickListener { showOpenAccountToast() }
+        if (demoMode.equals("true")) {
+            // show app with locked functions
+            Toast.makeText(requireContext(), "App in demo mode.", Toast.LENGTH_SHORT).show()
+            mlockUploads.setOnClickListener { showOpenAccountToast() }
+            mlockDownloads.setOnClickListener { showOpenAccountToast() }
+            mlockaccountSummary.setOnClickListener { showOpenAccountToast() }
+            mlockOthers.setOnClickListener { showOpenAccountToast() }
 
+            munlockFunctionalitiesBtn.setOnClickListener {
+                fragmentButtonToActivityClickListener.onButtonClicked()
+            }
+
+        } else {
+            // remove locked functions
+            munlockFunctionalitiesBtn.visibility = View.GONE
+            mlockUploads.visibility = View.GONE
+            mlockDownloads.visibility = View.GONE
+            mlockaccountSummary.visibility = View.GONE
+            mlockOthers.visibility = View.GONE
+        }
 
         //initialize fields
 

@@ -18,9 +18,12 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputEditText
 import ke.ac.mwaks.R
+import ke.ac.mwaks.adapter.DownloadsRecyclerAdapter
 import ke.ac.mwaks.adapter.RecyclerItemWithRemoveOption
 import ke.ac.mwaks.data.local.AppDatabase
 import ke.ac.mwaks.data.local.repo.SearchItemCacheRepository
+import ke.ac.mwaks.data.remote.repo.FilesRepository
+import ke.ac.mwaks.model.FileModel
 import ke.ac.mwaks.model.ListItemWithRemoveOption
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,23 +34,27 @@ class Downloads : Fragment() {
 
     private lateinit var mrecentSearches: RecyclerView
     private lateinit var search: TextInputEditText
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private lateinit var files : List<FileModel>
+    private lateinit var filesRepository: FilesRepository
+    private lateinit var mFilesView: RecyclerView
 
     @SuppressLint("MissingInflatedId", "NewApi")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        filesRepository = FilesRepository()
 
         val view = inflater.inflate(R.layout.fragment_downloads, container, false)
         mrecentSearches = view.findViewById(R.id.recentSearches)
         search = view.findViewById(R.id.search)
+        mFilesView = view.findViewById(R.id.filesView)
+        mFilesView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        val repo =
-            SearchItemCacheRepository(AppDatabase.getDB(requireContext()).searchItemCacheDao())
+        mFilesView.adapter = DownloadsRecyclerAdapter(filesRepository, requireActivity())
 
+
+        val repo = SearchItemCacheRepository(AppDatabase.getDB(requireContext()).searchItemCacheDao())
         var searches = repo.searches.value
         var adapter = RecyclerItemWithRemoveOption(searches) { id ->
             CoroutineScope(Dispatchers.IO).launch {
@@ -62,7 +69,6 @@ class Downloads : Fragment() {
             }
             false
         }
-
         mrecentSearches.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
         mrecentSearches.adapter = adapter
 
