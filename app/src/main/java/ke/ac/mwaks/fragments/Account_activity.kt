@@ -1,18 +1,14 @@
 package ke.ac.mwaks.fragments
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
 import ke.ac.mwaks.R
 
 class Account_activity : Fragment() {
@@ -45,13 +41,7 @@ class Account_activity : Fragment() {
         mlockDownloads.setOnClickListener { showOpenAccountToast() }
         mlockaccountSummary.setOnClickListener { showOpenAccountToast() }
         mlockOthers.setOnClickListener { showOpenAccountToast() }
-        munlockFunctionalitiesBtn.setOnClickListener {
 
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.accountActivityFragment, OnBoarding())
-            transaction.addToBackStack(null)
-            transaction.commit()
-        }
 
         //initialize fields
 
