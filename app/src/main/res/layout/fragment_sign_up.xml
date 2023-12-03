@@ -2,13 +2,14 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signUpFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_bg"
-    android:padding="10dp"
     android:nestedScrollingEnabled="true"
+    android:padding="10dp"
     tools:context=".fragments.SignUp">
-<!-- john.911.deo@gmail.com test1234-->
+    <!-- john.911.deo@gmail.com test1234-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -121,10 +122,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/selectedFilesRecycler"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="15dp"
+            android:layout_margin="15dp"
             app:cardBackgroundColor="@color/btn_primary"
             app:cardCornerRadius="15dp">
 
@@ -148,8 +146,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="center_horizontal"
-            />
+            android:layout_gravity="center_horizontal" />
 
     </LinearLayout>
 

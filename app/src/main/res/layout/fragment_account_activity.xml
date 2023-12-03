@@ -15,36 +15,12 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true" />
 
-    <!--    <androidx.cardview.widget.CardView-->
-    <!--        android:id="@+id/progressIndicatorLayout"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_below="@id/spacer"-->
-    <!--        android:layout_margin="20dp"-->
-    <!--        app:cardBackgroundColor="#FFBC2EFF"-->
-    <!--        app:cardCornerRadius="20dp">-->
-
-    <!--        <RelativeLayout-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_margin="10dp">-->
-
-    <!--            <com.google.android.material.progressindicator.LinearProgressIndicator-->
-    <!--                android:layout_width="match_parent"-->
-    <!--                android:layout_height="70dp"-->
-    <!--                android:progress="64"-->
-    <!--                android:progressDrawable="@drawable/semicircle_arc"-->
-    <!--                android:progressTint="@color/coming_soon_tint"-->
-    <!--                android:progressBackgroundTint="@color/btn_primary" />-->
-
-    <!--        </RelativeLayout>-->
-    <!--    </androidx.cardview.widget.CardView>-->
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/spacer"
+        android:layout_centerInParent="true"
         android:layout_margin="20dp"
         android:orientation="vertical">
 
@@ -112,38 +88,6 @@
 
 
                         </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/tv1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="5dp"
-                                android:layout_marginEnd="5dp"
-                                android:gravity="center_horizontal"
-                                android:maxWidth="150dp"
-                                android:padding="10dp"
-                                android:text="Includes all Pdf, Docx, Word, e.t.c"
-                                android:textColor="@color/white"
-                                android:textSize="15sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="15dp"
-                                android:gravity="center_horizontal"
-                                android:padding="10dp"
-                                android:text="1024 x 8000 Kbs"
-                                android:textColor="@color/white"
-                                android:textSize="15sp" />
-
-                        </LinearLayout>
-
 
                         <RelativeLayout
                             android:id="@+id/lockUploads"
@@ -241,36 +185,6 @@
 
 
                         </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/tv2"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="15dp"
-                                android:gravity="center_horizontal"
-                                android:padding="10dp"
-                                android:text="400K Images"
-                                android:textColor="@color/white"
-                                android:textSize="15sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="15dp"
-                                android:gravity="center_horizontal"
-                                android:padding="10dp"
-                                android:text="1024 x 90000 Kbs"
-                                android:textColor="@color/white"
-                                android:textSize="15sp" />
-
-                        </LinearLayout>
-
 
                         <RelativeLayout
                             android:id="@+id/lockDownloads"
@@ -389,28 +303,6 @@
 
                         </LinearLayout>
 
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/tv3"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="5dp"
-                                android:layout_marginEnd="5dp"
-                                android:gravity="center_horizontal"
-                                android:maxWidth="150dp"
-                                android:padding="10dp"
-                                android:text="A detailed summary about your account."
-                                android:textColor="@color/white"
-                                android:textSize="15sp" />
-
-                        </LinearLayout>
-
-
                         <RelativeLayout
                             android:id="@+id/lockaccountSummary"
                             android:layout_width="match_parent"
@@ -510,26 +402,6 @@
 
 
                         </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/tv4"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="15dp"
-                                android:gravity="center_horizontal"
-                                android:padding="10dp"
-                                android:text="A.O.B stuff."
-                                android:textColor="@color/white"
-                                android:textSize="15sp" />
-
-                        </LinearLayout>
-
 
                         <RelativeLayout
                             android:id="@+id/lockOthers"
