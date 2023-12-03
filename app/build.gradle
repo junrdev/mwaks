@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
 
-//    id 'com.google.devtools.ksp'
+    id 'com.google.devtools.ksp'
 //    id 'kotlin-kapt'
 //    id 'com.google.dagger.hilt.android'
 }
@@ -56,13 +56,23 @@ dependencies {
 
 
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.2"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
 
     //glide
     implementation 'com.github.bumptech.glide:glide:4.16.0'
 
     //coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
+
+
+    // room
+    def room_version = "2.6.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+
+    // To use Kotlin annotation processing tool (kapt)
+    ksp "androidx.room:room-compiler:$room_version"
 
 
 }
