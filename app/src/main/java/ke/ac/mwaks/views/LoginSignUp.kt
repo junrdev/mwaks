@@ -54,6 +54,12 @@ class LoginSignUp : AppCompatActivity(), FragmentButtonToActivityClickListener {
 
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+    }
+
     override fun onButtonClicked() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
