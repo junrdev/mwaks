@@ -155,4 +155,10 @@ class MainActivity : AppCompatActivity(), FragmentButtonToActivityClickListener 
         startActivity(intent)
         finish()
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d(TAG, "onActivityResult: req : $requestCode, data : $data")
+
+    }
 }

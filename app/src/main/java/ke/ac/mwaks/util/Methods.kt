@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentActivity
 
 object Methods {
 
-    const val IMAGE_PICK_CODE = 1
+    const val IMAGE_PICK_CODE = 111
     const val FILE_PICK_CODE = 2
 
     const val CAMERA_PERMISSION_CODE = 101
@@ -28,7 +28,8 @@ object Methods {
     fun openFilePicker(fragmentActivity: FragmentActivity){
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.type = "application/pdf|application/msword|application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+//        intent.type = "application/pdf|application/msword"
+        intent.type = "application/pdf"
         fragmentActivity.startActivityForResult(intent, FILE_PICK_CODE)
     }
 
