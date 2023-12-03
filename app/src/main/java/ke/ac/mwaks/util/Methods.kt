@@ -19,7 +19,6 @@ object Methods {
     const val All_PERMISSION_CODE = 125
     const val REQUEST_IMAGE_CAPTURE = 102
 
-
     fun openImagePicker(fragmentActivity: FragmentActivity){
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.setDataAndType( null,"image/*")
