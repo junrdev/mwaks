@@ -1,5 +1,6 @@
 package ke.ac.mwaks.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -11,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import com.google.firebase.auth.FirebaseAuth
@@ -19,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase
 import ke.ac.mwaks.MainActivity
 import ke.ac.mwaks.R
 import ke.ac.mwaks.model.AppUser
+import ke.ac.mwaks.util.FragmentButtonToActivityClickListener
 import ke.ac.mwaks.viewmodel.AuthScreensViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,10 +31,9 @@ import kotlin.math.log
 
 class SignIn : Fragment() {
 
+    private lateinit var fragmentButtonToActivityClickListener: FragmentButtonToActivityClickListener
+
     private val TAG = "SignIn"
-    private val authScreensViewModel = AuthScreensViewModel()
-    private lateinit var appUser: AppUser
-    private lateinit var user: FirebaseUser
 
     private lateinit var imageUrl: String
     private lateinit var imageUri: Uri
@@ -42,13 +44,7 @@ class SignIn : Fragment() {
     private lateinit var mloginPassword: EditText
     private lateinit var msignInButton: CardView
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val database = FirebaseDatabase.getInstance()
-
-    //
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
+//    private lateinit var
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,13 +52,6 @@ class SignIn : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_sign_in, container, false)
-
-        if (auth.currentUser != null) {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.signInFragment, Account_activity())
-            transaction.addToBackStack(null)
-            transaction.commit()
-        }
 
         mloginEmail = view.findViewById(R.id.loginEmail)
         mloginPassword = view.findViewById(R.id.loginPassword)
@@ -73,52 +62,44 @@ class SignIn : Fragment() {
             email = mloginEmail.text.toString()
             password = mloginPassword.text.toString()
 
-            if (email.isNotEmpty() && password.isNotEmpty())
-                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                    if (it.isComplete && it.isSuccessful) {
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                    if (it.isComplete) {
 
-                        val result = it.result
-
-                        Log.d(TAG, "onCreateView: ${it.result.user}")
-                        //add user details to database
-                        if (result.user != null) {
-                            val ref = database.getReference("users").child(result.user!!.uid).push()
-                                .setValue(
-                                    AppUser(
-                                        result.user!!.uid,
-                                        email,
-                                        "",
-                                        LocalDateTime.now(),
-                                        false,
-                                        emptyList<String>(),
-                                        emptyList<String>(),
-                                        emptyList<String>(),
-                                    )
-                                ).addOnCompleteListener {
-
-                                    //restart app
-//                                    requireActivity().parent.startActivity(
-//                                        Intent(
-//                                            Intent.FLAG_ACTIVITY_CLEAR_TOP
-//                                        )
-//                                    )
-
-                                    val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                                    transaction.replace(R.id.signInFragment, Account_activity())
-                                    transaction.addToBackStack(null)
-                                    transaction.commit()
-
-                                    requireActivity().finish()
-                                }
-
-                        }
-                    }
+                        if (it.isSuccessful) {
+                            // move to main activity
+                            fragmentButtonToActivityClickListener.onButtonClicked()
+                        } else
+                            Toast.makeText(
+                                requireContext(),
+                                "Failed to succeed with error : ${it.exception!!.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    } else
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to complete. Reason ${it.exception!!.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                 }
+            } else
+                Toast.makeText(
+                    requireActivity().applicationContext,
+                    "Provide all required fields",
+                    Toast.LENGTH_SHORT
+                ).show()
         }
-
-
 
         return view
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is FragmentButtonToActivityClickListener)
+            fragmentButtonToActivityClickListener = context
+        else
+            throw RuntimeException("${context} Lacks an implementations of FragmentButtonToActivityClickListener.")
+    }
+
 
 }

@@ -81,13 +81,8 @@ class Uploads : Fragment() {
         }
 
         val adapter = RecyclerItemWithRemoveOption(
-            items = mutableListOf(
-                ListItemWithRemoveOption(1, "Hello You searched me recently"),
-                ListItemWithRemoveOption(2, "Hello me"),
-                ListItemWithRemoveOption(3, "Hello"),
-                ListItemWithRemoveOption(4, "Hello")
-            )
-        )
+            items = emptyList()
+        ){}
         mselectedFilesRecycler.adapter = adapter
         mselectedFilesRecycler.layoutManager = LinearLayoutManager(
             requireActivity().applicationContext,
