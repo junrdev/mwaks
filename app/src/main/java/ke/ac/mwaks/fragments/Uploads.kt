@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -23,17 +24,13 @@ import ke.ac.mwaks.model.ListItemWithRemoveOption
 import ke.ac.mwaks.util.Methods
 import java.security.Permissions
 
+private const val TAG = "Uploads"
 class Uploads : Fragment() {
 
-    private val TAG = "Uploads"
     private lateinit var mselectedFilesRecycler: RecyclerView
     private lateinit var mopenCamera: CardView
     private lateinit var mfileUpload: CardView
     private lateinit var mimageUpload: CardView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,8 +67,8 @@ class Uploads : Fragment() {
                 )
 
         }
-        mimageUpload.setOnClickListener {
 
+        mimageUpload.setOnClickListener {
             if (checkFilePermissions())
                 Methods.openImagePicker(requireActivity())
         }
@@ -94,9 +91,6 @@ class Uploads : Fragment() {
         return view
     }
 
-    fun captureImage() {
-    }
-
 
     fun checkCameraPermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -115,7 +109,7 @@ class Uploads : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        Toast.makeText(requireContext(), "resultcode $resultCode", Toast.LENGTH_SHORT).show()
         Log.d(TAG, "onActivityResult: req : $requestCode, data : $data")
 
     }

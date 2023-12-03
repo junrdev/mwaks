@@ -142,8 +142,6 @@ class SignUp : Fragment() {
         data: Intent?
     ) {
         super.onActivityResult(requestCode, resultCode, data)
-
-
         if (requestCode == Methods.IMAGE_PICK_CODE && resultCode == RESULT_OK && data != null) {
             val selected = data.data
             Log.d(TAG, "onActivityResult: $data")
