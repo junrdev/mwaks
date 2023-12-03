@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_bg"
+    tools:context=".views.LoginSignUp">
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/loginSignUpTab"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:elevation="6dp"
+        android:padding="10dp"
+        app:tabBackground="@color/honey_dew" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_centerInParent="true"
+        android:id="@+id/loginSignUpPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loginSignUpTab" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_below="@id/loginSignUpPager"
+        android:id="@+id/showDemo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        app:cardBackgroundColor="@color/blue_tint"
+        app:cardCornerRadius="15dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:layout_margin="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Demo Mode"
+                android:drawableRight="@drawable/account_circle_24"
+                android:drawablePadding="5dp"
+                android:textColor="@color/white"
+                android:drawableTint="@color/light_bg"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
