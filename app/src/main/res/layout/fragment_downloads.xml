@@ -306,7 +306,34 @@
                 tools:itemCount="5"
                 tools:listitem="@layout/recent_search_item" />
 
+            <TextView
+                android:id="@+id/tv5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recentSearches"
+                android:layout_margin="20dp"
+                android:text="Files"
+                android:textSize="18sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/filesView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv5"
+                android:layout_marginTop="20dp"
+                android:padding="5dp"
+                tools:listitem="@layout/search_item_result"
+                tools:itemCount="5"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_below="@id/filesView"
+                />
         </RelativeLayout>
+
+
 
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

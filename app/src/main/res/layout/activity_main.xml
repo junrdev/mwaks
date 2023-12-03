@@ -47,6 +47,8 @@
         android:id="@+id/homePager"
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_height="match_parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
