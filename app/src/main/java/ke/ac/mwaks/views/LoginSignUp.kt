@@ -11,6 +11,7 @@ import androidx.core.content.edit
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.FirebaseAuth
 import ke.ac.mwaks.MainActivity
 import ke.ac.mwaks.R
 import ke.ac.mwaks.adapter.LoginSignUpPagerAdapter
@@ -22,7 +23,7 @@ class LoginSignUp : AppCompatActivity(), FragmentButtonToActivityClickListener {
     private lateinit var tabLayout: TabLayout
     private lateinit var demoMode: CardView
     private lateinit var sharedPreferences: SharedPreferences
-
+    private val auth : FirebaseAuth = FirebaseAuth.getInstance()
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +33,11 @@ class LoginSignUp : AppCompatActivity(), FragmentButtonToActivityClickListener {
         tabLayout = findViewById(R.id.loginSignUpTab)
         demoMode = findViewById(R.id.showDemo)
         sharedPreferences = getSharedPreferences("appmode", MODE_PRIVATE)
+
+        if (auth.currentUser != null) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
 
         demoMode.setOnClickListener {
             sharedPreferences.edit {
@@ -50,13 +56,6 @@ class LoginSignUp : AppCompatActivity(), FragmentButtonToActivityClickListener {
                 else -> tab.text = "Register"
             }
         }.attach()
-
-
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
 
     }
 

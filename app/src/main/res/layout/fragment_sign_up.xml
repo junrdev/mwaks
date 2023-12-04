@@ -50,7 +50,7 @@
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
                         android:cropToPadding="true"
-                        android:src="@drawable/img2" />
+                        android:src="@drawable/img1" />
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="100dp"

@@ -87,12 +87,12 @@ class DownloadsRecyclerAdapter constructor(
             fileUploadDate.text = "Uploaded on : ${fileModel.iat.toString()}"
             fileDownloadIcon.setOnClickListener { downloadListener(fileModel.fileId) }
 
-            Glide.with(fragmentActivity)
-                .load(Methods.ADMIN_IMAGE_URL)
-                .placeholder(R.drawable.account_circle_24)
-                .centerCrop()
-                .transform(CircleCrop())
-                .into(thumbNail)
+//            Glide.with(fragmentActivity)
+//                .load(Methods.ADMIN_IMAGE_URL)
+//                .placeholder(R.drawable.account_circle_24)
+////                .centerCrop()
+////                .transform(CircleCrop())
+//                .into(thumbNail)
         }
 
     }

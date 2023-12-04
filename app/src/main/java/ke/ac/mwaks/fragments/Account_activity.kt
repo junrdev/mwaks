@@ -12,11 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import ke.ac.mwaks.R
 import ke.ac.mwaks.util.FragmentButtonToActivityClickListener
 
 class Account_activity : Fragment() {
 
+    private lateinit var auth: FirebaseAuth
     private lateinit var mlockUploads: RelativeLayout
     private lateinit var mlockDownloads: RelativeLayout
     private lateinit var mlockaccountSummary: RelativeLayout
@@ -46,7 +48,8 @@ class Account_activity : Fragment() {
             requireActivity().getSharedPreferences("appmode", AppCompatActivity.MODE_PRIVATE)
                 .getString("demomode", "true")
 
-        if (demoMode.equals("true")) {
+        auth = FirebaseAuth.getInstance()
+        if (auth.currentUser == null) {
             // show app with locked functions
             Toast.makeText(requireContext(), "App in demo mode.", Toast.LENGTH_SHORT).show()
             mlockUploads.setOnClickListener { showOpenAccountToast() }

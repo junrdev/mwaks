@@ -2,12 +2,17 @@ package ke.ac.mwaks
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -56,6 +61,8 @@ class MainActivity : AppCompatActivity(), FragmentButtonToActivityClickListener 
 
         imageView = findViewById(R.id.profilePic)
 
+        imageView.setOnClickListener {
+        }
         runOnUiThread { authScreensViewModel.updateLoginStatus() }
 
         if (authScreensViewModel.uiState.value.isLoggedIn) {

@@ -16,12 +16,12 @@
 
         <ImageView
             android:id="@+id/fileModelImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:padding="10dp"
-            android:src="@drawable/upload_success" />
+            android:src="@drawable/img1" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
-                    android:src="@drawable/round_favorite_24"
+                    android:src="@drawable/baseline_favorite_border_24"
                     app:tint="@color/orange_tint" />
 
             </RelativeLayout>

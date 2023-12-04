@@ -11,7 +11,7 @@ data class AppUser @RequiresApi(Build.VERSION_CODES.O) constructor(
     val email: String,
     val profilePic: String,
     val joinedAt: LocalDateTime = LocalDateTime.now(),
-    val isActive: Boolean,
+    val isActive: Boolean = true,
     val uploads: List<String>,
     val downloads: List<String>,
     val favourites: List<String>
