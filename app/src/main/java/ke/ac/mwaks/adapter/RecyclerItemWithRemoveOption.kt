@@ -1,5 +1,6 @@
 package ke.ac.mwaks.adapter
 
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,13 +8,14 @@ import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import ke.ac.mwaks.R
 import ke.ac.mwaks.model.ListItemWithRemoveOption
 import ke.ac.mwaks.model.SearchItemCache
 
-class RecyclerItemWithRemoveOption(
-    val items: List<SearchItemCache>,
+class RecyclerItemWithRemoveOption @RequiresApi(Build.VERSION_CODES.O) constructor(
+    val items: MutableList<SearchItemCache>,
     val onItemClickListener: (id: String) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerItemWithRemoveOption.RecyclerItemWithRemoveViewHolder>() {
