@@ -4,10 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.core.content.edit
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -15,8 +19,13 @@ import com.google.firebase.auth.FirebaseAuth
 import ke.ac.mwaks.MainActivity
 import ke.ac.mwaks.R
 import ke.ac.mwaks.adapter.LoginSignUpPagerAdapter
+import ke.ac.mwaks.fragments.SignIn
+import ke.ac.mwaks.fragments.SignUp
 import ke.ac.mwaks.util.FragmentButtonToActivityClickListener
+import ke.ac.mwaks.util.Methods
 
+private const val TAG = "LoginSignUp"
+private lateinit var imageUri: Uri
 class LoginSignUp : AppCompatActivity(), FragmentButtonToActivityClickListener {
 
     private lateinit var viewPager2: ViewPager2
@@ -65,5 +74,8 @@ class LoginSignUp : AppCompatActivity(), FragmentButtonToActivityClickListener {
         finish()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 
 }
