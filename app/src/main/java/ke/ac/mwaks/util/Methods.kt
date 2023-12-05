@@ -12,25 +12,17 @@ import androidx.fragment.app.FragmentActivity
 object Methods {
 
     const val IMAGE_PICK_CODE = 111
-    const val FILE_PICK_CODE = 2
+    const val FILE_PICK_CODE = 123
 
     const val CAMERA_PERMISSION_CODE = 101
     const val FILES_PERMISSION_CODE = 123
     const val All_PERMISSION_CODE = 125
     const val REQUEST_IMAGE_CAPTURE = 102
-    const val ADMIN_IMAGE_URL = "https://firebasestorage.googleapis.com/v0/b/mwaks-api.appspot.com/o/admin%2F2023-04-16-22-53-49-373.jpg?alt=media&token=61c130f4-aaac-4295-8ab8-bb58aaa5ab88"
+    const val ADMIN_IMAGE_URL = "https://firebasestorage.googleapis.com/v0/b/mwaks-api.appspot.com/o/admin%2Fdefaults%2Fcf5e4aaf8dbbed0c485fa18eee5d7ad9.jpg?alt=media&token=4e14456b-a2b2-45f1-86ea-79dfdc6726ad"
     fun openImagePicker(fragmentActivity: FragmentActivity){
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.setDataAndType( null,"image/*")
+//        intent.setDataAndType( null,"image/*")
         fragmentActivity.startActivityForResult(intent, IMAGE_PICK_CODE)
-    }
-
-    fun openFilePicker(fragmentActivity: FragmentActivity){
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-//        intent.type = "application/pdf|application/msword"
-        intent.type = "application/pdf"
-        fragmentActivity.startActivityForResult(intent, FILE_PICK_CODE)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -50,4 +42,16 @@ object Methods {
         if (intent.resolveActivity(fragmentActivity.packageManager) != null)
             fragmentActivity.startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
     }
+
+
+    fun getPathFromUri(uri: Uri, context: Context): String? {
+        val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(uri, filePathColumn, null, null, null)
+        cursor?.moveToFirst()
+        val columnIndex = cursor?.getColumnIndex(filePathColumn[0])
+        val filePath = columnIndex?.let { cursor.getString(it) }
+        cursor?.close()
+        return filePath
+    }
+
 }
