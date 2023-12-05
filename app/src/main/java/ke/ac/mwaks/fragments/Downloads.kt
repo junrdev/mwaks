@@ -30,11 +30,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 private const val TAG = "Downloads"
+
 class Downloads : Fragment() {
 
     private lateinit var mrecentSearches: RecyclerView
     private lateinit var search: TextInputEditText
-    private lateinit var files : List<FileModel>
+    private lateinit var files: List<FileModel>
     private lateinit var filesRepository: FilesRepository
     private lateinit var mFilesView: RecyclerView
 
@@ -49,13 +50,15 @@ class Downloads : Fragment() {
         mrecentSearches = view.findViewById(R.id.recentSearches)
         search = view.findViewById(R.id.search)
         mFilesView = view.findViewById(R.id.filesView)
-        mFilesView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        mFilesView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         mFilesView.adapter = DownloadsRecyclerAdapter(filesRepository, requireActivity())
 
 
-        val repo = SearchItemCacheRepository(AppDatabase.getDB(requireContext()).searchItemCacheDao())
-        var searches = repo.searches.value
+        val repo =
+            SearchItemCacheRepository(AppDatabase.getDB(requireContext()).searchItemCacheDao())
+        var searches = repo.searches.value.toMutableList()
         var adapter = RecyclerItemWithRemoveOption(searches) { id ->
             CoroutineScope(Dispatchers.IO).launch {
                 repo.deleteSearchItem(searches.filter { searches -> searches.id == id }[0])
@@ -69,7 +72,11 @@ class Downloads : Fragment() {
             }
             false
         }
-        mrecentSearches.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
+        mrecentSearches.layoutManager = LinearLayoutManager(
+            requireActivity().applicationContext,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
         mrecentSearches.adapter = adapter
 
         // Inflate the layout for this fragment
