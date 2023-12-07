@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/searchView"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -48,7 +48,7 @@
                     android:singleLine="true"
                     android:textAlignment="center" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </androidx.appcompat.widget.SearchView>
             <!--            </androidx.cardview.widget.CardView>-->
 
             <TextView

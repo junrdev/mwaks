@@ -267,7 +267,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:text="Selected files"
+            android:text="Selected Images"
             android:textSize="18sp"
             android:textStyle="bold"
             android:id="@+id/title3"
@@ -277,8 +277,35 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="250dp"
             android:layout_below="@id/title3"
+            android:layout_marginStart="25dp"
+            tools:listitem="@layout/picked_file_item"
+            tools:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="5"
+            android:padding="5dp"
+            android:id="@+id/selectedImagesRecycler"
+            />
+
+
+        <TextView
+            android:layout_below="@id/selectedImagesRecycler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:text="Selected files"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:id="@+id/title4"
+            android:layout_marginBottom="25dp"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="250dp"
+            android:layout_below="@id/title4"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="10dp"
