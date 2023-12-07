@@ -58,7 +58,6 @@
         android:layout_alignParentBottom="true"
         android:background="@color/honey_dew"
         android:padding="5dp"
-        app:layout_anchorGravity="bottom"
         app:menu="@menu/bottom_nav_menu" />
 
 </RelativeLayout>

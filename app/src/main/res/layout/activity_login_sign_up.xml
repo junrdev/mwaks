@@ -10,27 +10,29 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/loginSignUpTab"
-        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:elevation="6dp"
         android:padding="10dp"
         app:tabBackground="@color/honey_dew" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:layout_centerInParent="true"
         android:id="@+id/loginSignUpPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loginSignUpTab" />
+        android:layout_below="@id/loginSignUpTab"
+        android:layout_centerInParent="true" />
 
     <androidx.cardview.widget.CardView
-        android:layout_below="@id/loginSignUpPager"
         android:id="@+id/showDemo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="25dp"
+        android:layout_below="@id/loginSignUpPager"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="50dp"
         app:cardBackgroundColor="@color/blue_tint"
         app:cardCornerRadius="15dp">
 
@@ -40,15 +42,14 @@
             android:layout_margin="10dp">
 
             <TextView
-                android:layout_margin="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Demo Mode"
                 android:drawableRight="@drawable/account_circle_24"
                 android:drawablePadding="5dp"
-                android:textColor="@color/white"
                 android:drawableTint="@color/light_bg"
+                android:text="Demo Mode"
+                android:textColor="@color/white"
                 android:textSize="18sp" />
 
         </RelativeLayout>
