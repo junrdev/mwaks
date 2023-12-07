@@ -26,45 +26,6 @@ class DownloadsRecyclerAdapter constructor(
 
     private val files: List<FileModel> = filesRepository.getDocuments()
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private val _files = listOf(
-        FileModel(
-            fileId = UUID.randomUUID().toString(),
-            fileType = "pdf",
-            fileDimensions = FileDimensions(100F, 100F),
-            fileName = "demo file",
-            fileSize = 3.144,
-            userId = UUID.randomUUID().toString(),
-            thumbNail = "demo"
-        ),
-        FileModel(
-            fileId = UUID.randomUUID().toString(),
-            fileType = "pdf",
-            fileDimensions = FileDimensions(100F, 100F),
-            fileName = "demo file",
-            fileSize = 3.144,
-            userId = UUID.randomUUID().toString(),
-            thumbNail = "demo"
-        ),
-        FileModel(
-            fileId = UUID.randomUUID().toString(),
-            fileType = "pdf",
-            fileDimensions = FileDimensions(100F, 100F),
-            fileName = "demo file",
-            fileSize = 3.144,
-            userId = UUID.randomUUID().toString(),
-            thumbNail = "demo"
-        ),
-        FileModel(
-            fileId = UUID.randomUUID().toString(),
-            fileType = "pdf",
-            fileDimensions = FileDimensions(100F, 100F),
-            fileName = "demo file",
-            fileSize = 3.144,
-            userId = UUID.randomUUID().toString(),
-            thumbNail = "demo"
-        ),
-    )
 
     class DownloadItemViewHolder(val view: View) :
         RecyclerView.ViewHolder(view) {
@@ -84,7 +45,7 @@ class DownloadsRecyclerAdapter constructor(
             fileName.text = fileModel.fileName
             fileSize.text = "${fileModel.fileSize}"
             fileType.text = fileModel.fileType
-            fileUploadDate.text = "Uploaded on : ${fileModel.iat.toString()}"
+//            fileUploadDate.text = "Uploaded on : ${fileModel.iat.toString()}"
             fileDownloadIcon.setOnClickListener { downloadListener(fileModel.fileId) }
 
 //            Glide.with(fragmentActivity)
@@ -105,15 +66,15 @@ class DownloadsRecyclerAdapter constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun getItemCount(): Int {
-        return _files.size
+        return files.size
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: DownloadItemViewHolder, position: Int) {
-        holder.bind(_files[position], fragmentActivity) {
+        holder.bind(files[position], fragmentActivity) {
             Toast.makeText(
                 fragmentActivity.applicationContext,
-                "File ${_files[position].fileId}",
+                "File ${files[position].fileId}",
                 Toast.LENGTH_SHORT
             ).show()
 

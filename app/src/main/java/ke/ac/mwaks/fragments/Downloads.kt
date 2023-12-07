@@ -38,7 +38,7 @@ class Downloads : Fragment() {
     private lateinit var files: List<FileModel>
     private lateinit var filesRepository: FilesRepository
     private lateinit var mFilesView: RecyclerView
-
+    private lateinit var adapter : RecyclerItemWithRemoveOption
     @SuppressLint("MissingInflatedId", "NewApi")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,11 +59,13 @@ class Downloads : Fragment() {
         val repo =
             SearchItemCacheRepository(AppDatabase.getDB(requireContext()).searchItemCacheDao())
         var searches = repo.searches.value.toMutableList()
-        var adapter = RecyclerItemWithRemoveOption(searches) { id ->
-            CoroutineScope(Dispatchers.IO).launch {
-                repo.deleteSearchItem(searches.filter { searches -> searches.id == id }[0])
-            }
-        }
+        adapter = RecyclerItemWithRemoveOption(searches)
+//        { selected, index ->
+//            CoroutineScope(Dispatchers.IO).launch {
+//                repo.deleteSearchItem(selected)
+//                onRemoveAction(index)
+//            }
+//        }
 
         // add search to recent
         search.setOnEditorActionListener { _, actionId, _ ->
@@ -81,6 +83,14 @@ class Downloads : Fragment() {
 
         // Inflate the layout for this fragment
         return view
+    }
+
+    /***
+     * Updates the recycler status after an item(s) is removed
+     * from the list
+     */
+    private fun onRemoveAction(index : Int){
+        adapter.notifyItemRemoved(index)
     }
 
 }

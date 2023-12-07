@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
     <item
         android:title=" "
+        app:showAsAction="always"
+        />
+
+    <item
+        android:title="Share"
+        android:icon="@drawable/baseline_share_24"
+        android:iconTint="@color/btn_primary"
+        android:id="@+id/shareOption"
         />
 
     <item
         android:title="Logout"
-        android:id="@+id/logoutMenuIcon"
+        android:id="@+id/logoutMenu"
         android:icon="@drawable/account_circle_24"
         />
+
 </menu>
