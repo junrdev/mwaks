@@ -14,6 +14,7 @@
     <color name="btn_primary">#FF388E3C</color>
     <color name="light_grey">#FFECEEF8</color>
     <color name="orange_tint">#E64A19</color>
+    <color name="danger_tint">#D32F2F</color>
     <color name="blue_tint">#1976D2</color>
     <color name="purple_tint">#512DA8</color>
     <color name="coming_soon_tint">#FCE4EC</color>
