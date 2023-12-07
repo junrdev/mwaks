@@ -29,14 +29,12 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import kotlin.math.log
 
+private const val TAG = "SignIn"
+
 class SignIn : Fragment() {
 
     private lateinit var fragmentButtonToActivityClickListener: FragmentButtonToActivityClickListener
 
-    private val TAG = "SignIn"
-
-    private lateinit var imageUrl: String
-    private lateinit var imageUri: Uri
     private lateinit var email: String
     private lateinit var password: String
 
@@ -44,7 +42,7 @@ class SignIn : Fragment() {
     private lateinit var mloginPassword: EditText
     private lateinit var msignInButton: CardView
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-//    private lateinit var
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

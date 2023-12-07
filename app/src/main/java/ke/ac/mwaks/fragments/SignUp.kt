@@ -3,6 +3,7 @@ package ke.ac.mwaks.fragments
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -39,23 +40,17 @@ class SignUp : Fragment() {
     private lateinit var msignUpSelectImage: ImageView
     private lateinit var mselectedImage: ShapeableImageView
     private var auth = FirebaseAuth.getInstance()
-
     private lateinit var email: EditText
     private lateinit var password: EditText
-
     private lateinit var msignUpButton: CardView
-
     private val database = FirebaseDatabase.getInstance()
-
     private lateinit var fragmentButtonToActivityClickListener: FragmentButtonToActivityClickListener
-
     private lateinit var progress: ProgressDialog
-
     private lateinit var imageUri: Uri
     private val storageRef = Firebase.storage.reference
-    private val usersImagesRef = storageRef.child("userblob/profile")
-    private var filepath : String = "no_file_selected"
+    private val usersImagesRef = storageRef.child("userblob/")
 
+    private var filepath: String = "no_file_selected"
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
@@ -80,11 +75,7 @@ class SignUp : Fragment() {
         progress.setMessage("Creating account.Please wait.....")
         progress.setCancelable(false)
 
-        msignUpSelectImage.setOnClickListener { v ->
-            openImage()
-
-
-        }
+        msignUpSelectImage.setOnClickListener { v -> openImage() }
 
         msignUpButton.setOnClickListener {
 
@@ -117,151 +108,152 @@ class SignUp : Fragment() {
         }
 
 //        view.on
-    return view
-}
+        return view
+    }
 
-@RequiresApi(Build.VERSION_CODES.O)
-private fun createUserWithProfilePic(uploadTask: UploadTask, user: FirebaseUser?) {
-    uploadTask.continueWithTask {
-        if (!it.isSuccessful)
-            it.exception?.let {
-                throw it
-            }
-        usersImagesRef.downloadUrl
-    }.addOnCompleteListener {
-        if (it.isSuccessful) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createUserWithProfilePic(uploadTask: UploadTask, user: FirebaseUser?) {
+        uploadTask.continueWithTask {
+            if (!it.isSuccessful)
+                it.exception?.let {
+                    throw it
+                }
+            usersImagesRef.downloadUrl
+        }.addOnCompleteListener {
+            if (it.isSuccessful) {
 
-            val dl_url = it.result
+                val dl_url = it.result
 
-            usersImagesRef.metadata.addOnSuccessListener {
-                val user = AppUser(
-                    user!!.uid,
-                    email.text.toString(),
-                    dl_url.toString(),
-                    LocalDateTime.now(),
-                    true,
-                    emptyList(),
-                    emptyList(),
-                    emptyList()
-                )
-                // saving user metadata to database
-                database.getReference("user_metadata").push()
-                    .setValue(user)
-                    .addOnCompleteListener {
+                usersImagesRef.metadata.addOnSuccessListener {
+                    val appUser = AppUser(
+                        user!!.uid,
+                        email.text.toString(),
+                        dl_url.toString(),
+                        LocalDateTime.now(),
+                        true,
+                        emptyList(),
+                        emptyList(),
+                        emptyList()
+                    )
+                    // saving user metadata to database
+                    database.getReference("user_metadata").child(user.uid)
+                        .setValue(appUser)
+                        .addOnCompleteListener {
 
 //                            progress.hide()
-                        if (it.isComplete) {
-                            if (!it.isSuccessful) {
-                                fragmentButtonToActivityClickListener.onButtonClicked()
-                            } else {
+                            if (it.isComplete) {
+                                if (!it.isSuccessful) {
+                                    fragmentButtonToActivityClickListener.onButtonClicked()
+                                }
+                            } else
                                 Toast.makeText(
                                     requireContext(),
-                                    "Failed to succeed with error : {it.exception!!.message}",
+                                    "Failed to complete with error : ${it.exception!!.message}",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                            }
-                        } else
-                            Toast.makeText(
-                                requireContext(),
-                                "Failed to complete with error : ${it.exception!!.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
 
-                        if (it.isCanceled)
-                            Toast.makeText(
-                                requireContext(),
-                                "Cancelled with error : ${it.exception!!.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            if (it.isCanceled)
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Cancelled with error : ${it.exception!!.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
 
+                        }
+                        .addOnFailureListener { e ->
+                            auth.signOut()
+                            Log.d(TAG, "onCreateView: Failed to save user : ${e.message}")
+                        }
+                }
+
+
+            }
+        }.addOnFailureListener {
+            Toast.makeText(
+                requireContext(),
+                "Failed to complete with error : ${it.message}",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createUserWithoutProfilePic(user: FirebaseUser?) {
+        val user = AppUser(
+            user!!.uid,
+            email.text.toString(),
+            Methods.ADMIN_IMAGE_URL,
+            LocalDateTime.now(),
+            true,
+            emptyList(),
+            emptyList(),
+            emptyList()
+        )
+        // saving user metadata to database
+        database.getReference("user_metadata").push()
+            .setValue(user)
+            .addOnCompleteListener {
+
+                progress.hide()
+                if (it.isComplete) {
+                    if (!it.isSuccessful) {
+                        fragmentButtonToActivityClickListener.onButtonClicked()
+                    } else {
+                        auth.signOut()
+                        Toast.makeText(requireContext(), "Failed to succeed with error : ${it.exception!!.message}", Toast.LENGTH_SHORT).show()
                     }
-                    .addOnFailureListener { e ->
-                        Log.d(TAG, "onCreateView: Failed to save user : ${e.message}")
-                    }
+                } else {
+                    auth.signOut()
+                    Toast.makeText(requireContext(), "Failed to complete with error : ${it.exception!!.message}", Toast.LENGTH_SHORT).show()
+                }
+                if (it.isCanceled) {
+                    auth.signOut()
+
+                    Toast.makeText(requireContext(), "Cancelled with error : ${it.exception!!.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.d(TAG, "onCreateView: Failed to save user : ${e.message}")
             }
 
+    }
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Methods.IMAGE_PICK_CODE && resultCode == RESULT_OK && data != null) {
+            data?.data?.let {
+                Log.d(TAG, "onActivityResult: $it")
+                imageUri = it
+                mselectedImage.setImageURI(it)
+                filepath = it.let {
+                    requireContext()?.let { _context ->
+                        Methods.getPathFromUri(imageUri, _context)
+                    }
+                }.toString()
+
+                Log.d(TAG, "onActivityResult: $filepath")
+
+            }
         }
     }
-}
 
-@RequiresApi(Build.VERSION_CODES.O)
-private fun createUserWithoutProfilePic(user: FirebaseUser?) {
-    val user = AppUser(
-        user!!.uid,
-        email.text.toString(),
-        Methods.ADMIN_IMAGE_URL,
-        LocalDateTime.now(),
-        true,
-        emptyList(),
-        emptyList(),
-        emptyList()
-    )
-    // saving user metadata to database
-    database.getReference("user_metadata").push()
-        .setValue(user)
-        .addOnCompleteListener {
-
-            progress.hide()
-            if (it.isComplete) {
-                if (!it.isSuccessful) {
-                    fragmentButtonToActivityClickListener.onButtonClicked()
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Failed to succeed with error : {it.exception!!.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            } else
-                Toast.makeText(
-                    requireContext(),
-                    "Failed to complete with error : ${it.exception!!.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-            if (it.isCanceled)
-                Toast.makeText(
-                    requireContext(),
-                    "Cancelled with error : ${it.exception!!.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-        }
-        .addOnFailureListener { e ->
-            Log.d(TAG, "onCreateView: Failed to save user : ${e.message}")
-        }
-
-}
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-override fun onActivityResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent?
-) {
-    super.onActivityResult(requestCode, resultCode, data)
-    if (requestCode == Methods.IMAGE_PICK_CODE && resultCode == RESULT_OK && data != null) {
-        data?.data?.let {
-            Log.d(TAG, "onActivityResult: $it")
-            imageUri = it
-            mselectedImage.setImageURI(it)
-            filepath = it.let {
-                requireContext()?.let { _context ->
-                    Methods.getPathFromUri(imageUri, _context)
-                }
-            }.toString()
-
-            Log.d(TAG, "onActivityResult: $filepath")
-
-        }
+    fun openImage() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, Methods.IMAGE_PICK_CODE)
     }
-}
 
-fun openImage() {
-    val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-    startActivityForResult(intent, Methods.IMAGE_PICK_CODE)
-}
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is FragmentButtonToActivityClickListener)
+            fragmentButtonToActivityClickListener = context
+        else
+            throw RuntimeException("${context} Lacks an implementations of FragmentButtonToActivityClickListener.")
+    }
 }

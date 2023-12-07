@@ -14,24 +14,36 @@ import ke.ac.mwaks.R
 import ke.ac.mwaks.model.ListItemWithRemoveOption
 import ke.ac.mwaks.model.SearchItemCache
 
-class RecyclerItemWithRemoveOption @RequiresApi(Build.VERSION_CODES.O) constructor(
+class RecyclerItemWithRemoveOption constructor(
     val items: MutableList<SearchItemCache>,
-    val onItemClickListener: (id: String) -> Unit
+//    val onItemClickListener: (searchItem: SearchItemCache, index: Int) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerItemWithRemoveOption.RecyclerItemWithRemoveViewHolder>() {
 
     private val TAG = "RecyclerItemWithRemoveO"
 
-    class RecyclerItemWithRemoveViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class RecyclerItemWithRemoveViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
         private var itemName: TextView = itemView.findViewById(R.id.listItemText)
         private var removeItemButton: ImageView = itemView.findViewById(R.id.listItemRemove)
 
         fun bind(
             searchItemCache: SearchItemCache,
-            onItemClickListener: (id: String) -> Unit
+            index: Int,
+//            onItemClickListener: (searchItem: SearchItemCache, index: Int) -> Unit
         ) {
             itemName.text = searchItemCache.text
-            removeItemButton.setOnClickListener { onItemClickListener(searchItemCache.id) }
+            removeItemButton.setOnClickListener {
+
+                val position = adapterPosition
+
+                if (position != RecyclerView.NO_POSITION) {
+                    items.removeAt(position)
+                    notifyItemRemoved(position)
+                }
+
+//                onItemClickListener(searchItemCache, index)
+            }
         }
     }
 
@@ -49,8 +61,10 @@ class RecyclerItemWithRemoveOption @RequiresApi(Build.VERSION_CODES.O) construct
     }
 
     override fun onBindViewHolder(holder: RecyclerItemWithRemoveViewHolder, position: Int) {
-        holder.bind(items[position]) {
-            id -> onItemClickListener(id)
-        }
+        holder.bind(items[position], position)
+//        { item, index ->
+//            Log.d(TAG, "onBindViewHolder: $item @ $index")
+//            onItemClickListener(items[position], position)
+//        }
     }
 }
