@@ -17,7 +17,7 @@ import java.util.UUID
 @TypeConverters(value = [DateConverter::class])
 data class SearchItemCache @RequiresApi(Build.VERSION_CODES.O) constructor(
     @PrimaryKey val id: String = UUID.randomUUID().toString().split("-").toString(),
-    @ColumnInfo(name = "search_text") val text: String,
+    @ColumnInfo(name = "search_text") var text: String,
     @ColumnInfo(name = "search_time") val searchTime: Date = Date(System.currentTimeMillis())
 )
 //{

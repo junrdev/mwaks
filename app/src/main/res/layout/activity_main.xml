@@ -1,63 +1,282 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainDrawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/beaver"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/mainToolBar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:elevation="5dp"
-        android:background="@color/honey_dew"
-        android:padding="5dp">
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mainToolBar"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="@color/honey_dew"
+            android:elevation="5dp"
+            android:padding="5dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/toggleDrawerBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/round_notes_24"
+                    app:tint="@color/rich_black" />
+
+                <RelativeLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_toStartOf="@id/profilePic">
+
+                    <ImageView
+                        android:id="@+id/trash"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="3dp"
+                        android:contentDescription="profile picture"
+                        android:src="@drawable/baseline_delete_24"
+                        app:tint="@color/blue_tint" />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="25dp"
+                        android:padding="5dp"
+                        app:cardBackgroundColor="@color/orange_tint"
+                        app:cardCornerRadius="15dp">
+
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/profilePic"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="profile picture"
+                    tools:src="@drawable/round_notes_24" />
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/homePager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/homeBottomNavigation"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/honey_dew"
+            android:padding="5dp"
+            app:menu="@menu/bottom_nav_menu" />
+    </RelativeLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/sideNavigationView"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="100dp"
+        android:alpha="0.9"
+        android:background="@drawable/right_bottom_rounded_corner_shape"
+        android:backgroundTint="@color/orange_tint">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            >
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:padding="5dp">
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerVertical="true"
-                android:src="@drawable/round_notes_24"
-                app:tint="@color/rich_black" />
 
-            <ImageView
-                android:id="@+id/profilePic"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+		<ImageView
+                android:id="@+id/closeSideView"
+                android:layout_width="30dp"
+	        android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:contentDescription="profile picture"
-                tools:src="@drawable/round_notes_24" />
+                android:layout_marginEnd="20dp"
+		android:layout_marginBottom="30dp"
+		app:tint="@color/light_bg"
+		android:layout_marginTop="30dp"
+                android:src="@drawable/round_clear_24" />
+
+
+            <LinearLayout
+		android:layout_below="@id/closeSideView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                   >
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="50dp"
+                        tools:src="@drawable/img1" />
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/baseline_edit_24"
+                        app:tint="@color/light_bg"
+                        android:layout_centerInParent="true"
+                        />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize" />
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/updateAppButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:cardBackgroundColor="@color/light_grey"
+                    app:cardCornerRadius="15dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:text="Update App"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/devOptionsButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:cardBackgroundColor="@color/light_grey"
+                    app:cardCornerRadius="15dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:text="Developer Info"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/reviewsAndComments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:cardBackgroundColor="@color/light_grey"
+                    app:cardCornerRadius="15dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:text="Review and Recommendations"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/disableAccountButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:cardBackgroundColor="@color/light_grey"
+                    app:cardCornerRadius="15dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:text="Disable Account"
+                            android:textColor="@color/danger_tint"
+                            android:textStyle="bold" />
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="10dp"
+                            android:drawableTint="@color/orange_tint" />
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/appversion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="50dp"
+                    android:text="App Version 1.0"
+                    android:textColor="@color/light_bg"
+                    android:textSize="22sp" />
+
+            </LinearLayout>
         </RelativeLayout>
+    </com.google.android.material.navigation.NavigationView>
 
-    </androidx.appcompat.widget.Toolbar>
-
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/homePager"
-        android:layout_centerInParent="true"
-        android:layout_width="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_height="match_parent" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/homeBottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/honey_dew"
-        android:padding="5dp"
-        app:menu="@menu/bottom_nav_menu" />
-
-</RelativeLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

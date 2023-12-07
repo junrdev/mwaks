@@ -1,5 +1,6 @@
 package ke.ac.mwaks.util
 
 interface FragmentButtonToActivityClickListener {
-    fun onButtonClicked()
+    abstract fun onButtonClicked()
+//    abstract fun onLogginOrRegisterEvent()
 }
