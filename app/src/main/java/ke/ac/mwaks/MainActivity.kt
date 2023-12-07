@@ -13,15 +13,18 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
@@ -52,10 +55,13 @@ class MainActivity : AppCompatActivity(), FragmentButtonToActivityClickListener 
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var imageView: ImageView
     private lateinit var toolbar: Toolbar
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
+    private lateinit var mtoggleDrawerBtn : ImageView
 
     private val auth = FirebaseAuth.getInstance()
     private lateinit var user: FirebaseUser
-    private lateinit var rtdb : DatabaseReference
+    private lateinit var rtdb: DatabaseReference
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,17 +69,30 @@ class MainActivity : AppCompatActivity(), FragmentButtonToActivityClickListener 
         setContentView(R.layout.activity_main)
 
         toolbar = findViewById(R.id.mainToolBar)
+        drawerLayout = findViewById(R.id.mainDrawerLayout)
+        mtoggleDrawerBtn = findViewById(R.id.toggleDrawerBtn)
+
+        actionBarDrawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open_side_bar, R.string.close_side_bar)
+        drawerLayout.addDrawerListener(actionBarDrawerToggle)
+
         setSupportActionBar(toolbar)
         requirePermissions()
 
         imageView = findViewById(R.id.profilePic)
 
+        mtoggleDrawerBtn.setOnClickListener{
+            if (drawerLayout.isDrawerOpen(androidx.core.view.GravityCompat.START))
+                drawerLayout.closeDrawer(androidx.core.view.GravityCompat.START)
+            else
+                drawerLayout.openDrawer(androidx.core.view.GravityCompat.START)
+        }
 
-        if (auth.currentUser == null){
+
+        if (auth.currentUser == null) {
             imageView.setOnClickListener {
                 showLockedPopupMenu(it)
             }
-        }else{
+        } else {
             user = auth.currentUser!!
             rtdb = FirebaseDatabase.getInstance().getReference("user_metadata").child(user.uid)
 
@@ -81,28 +100,12 @@ class MainActivity : AppCompatActivity(), FragmentButtonToActivityClickListener 
             rtdb.get().addOnCompleteListener {
                 // Load users profile picture
                 Log.d(TAG, "onCreate: ${it.result}")
-                Log.d(TAG, "onCreate: ${it.result.ref}")
-                Log.d(TAG, "onCreate: ${it.result.childrenCount}")
-                Log.d(TAG, "onCreate: ${it.result.children}")
-                Log.d(TAG, "onCreate: ${it.result.key}")
-
-//                it.result.children.forEach {
-//                    Log.d(TAG, "onCreate: ${it.value.toString()}")
-//                    Log.d(TAG, "onCreate: ${it.child("profilePic")}")
-//                    Log.d(TAG, "onCreate: ${it.child("profilePic").value}")
-//                }
-//                if (it.isSuccessful && it.isComplete) {
-//                    it.result.children.forEach {
-//                        Log.d(TAG, "onCreate: ${it.value.toString()}")
-//                        Log.d(TAG, "onCreate: ${it.child("profilePic")}")
-//                        Log.d(TAG, "onCreate: ${it.child("profilePic").value}")
-//                    }
-////                    Glide.with(this)
-////                        .load(it.result?.child("profilePic"))
-////                        .placeholder(R.drawable.account_circle_24)
-////                        .transform(CircleCrop())
-////                        .into(imageView)
-//                }
+                Log.d(TAG, "onCreate: ${it.result.child("profilePic").value}")
+                Glide.with(this)
+                    .load(it.result?.child("profilePic")?.value)
+                    .placeholder(R.drawable.account_circle_24)
+                    .transform(CircleCrop())
+                    .into(imageView)
             }
         }
 
@@ -194,6 +197,7 @@ class MainActivity : AppCompatActivity(), FragmentButtonToActivityClickListener 
         finish()
     }
 
+
     private fun showPopupMenu(view: View) {
         val popupMenu = PopupMenu(this, view)
         popupMenu.menuInflater.inflate(R.menu.logooutmenu, popupMenu.menu)
@@ -210,16 +214,17 @@ class MainActivity : AppCompatActivity(), FragmentButtonToActivityClickListener 
         popupMenu.setOnDismissListener { popupMenu.dismiss() }
         popupMenu.show()
     }
+
     private fun showLockedPopupMenu(view: View) {
         val popupMenu = PopupMenu(this, view)
         popupMenu.menuInflater.inflate(R.menu.logooutmenu, popupMenu.menu)
         popupMenu.setOnMenuItemClickListener {
             if (it.itemId == R.id.logoutMenu) {
                 it.isEnabled = false
-            }else if (it.itemId == R.id.shareOption){
+            } else if (it.itemId == R.id.shareOption) {
 
-                val snackbar = Snackbar.make(view, "To share : ",Snackbar.LENGTH_SHORT)
-                snackbar.setAction("Click here"){
+                val snackbar = Snackbar.make(view, "To share : ", Snackbar.LENGTH_SHORT)
+                snackbar.setAction("Click here") {
 //                    val intent = Intent(URI.create(""))
                     Log.d(TAG, "showLockedPopupMenu: snack clicked")
                 }
@@ -231,6 +236,10 @@ class MainActivity : AppCompatActivity(), FragmentButtonToActivityClickListener 
         // dismiss option
         popupMenu.setOnDismissListener { popupMenu.dismiss() }
         popupMenu.show()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (actionBarDrawerToggle.onOptionsItemSelected(item)) true else super.onOptionsItemSelected(item)
     }
 
 }

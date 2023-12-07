@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -13,26 +14,40 @@ import androidx.recyclerview.widget.RecyclerView
 import ke.ac.mwaks.R
 import ke.ac.mwaks.model.ListItemWithRemoveOption
 import ke.ac.mwaks.model.SearchItemCache
+import ke.ac.mwaks.model.SelectedItem
 
+private const val TAG = "RecyclerItemWithRemoveO"
 class RecyclerItemWithRemoveOption constructor(
-    val items: MutableList<SearchItemCache>,
-//    val onItemClickListener: (searchItem: SearchItemCache, index: Int) -> Unit
+    val items: MutableList<SelectedItem>,
 ) :
     RecyclerView.Adapter<RecyclerItemWithRemoveOption.RecyclerItemWithRemoveViewHolder>() {
 
-    private val TAG = "RecyclerItemWithRemoveO"
 
     inner class RecyclerItemWithRemoveViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-        private var itemName: TextView = itemView.findViewById(R.id.listItemText)
+        private var itemName: EditText = itemView.findViewById(R.id.listItemText)
         private var removeItemButton: ImageView = itemView.findViewById(R.id.listItemRemove)
 
         fun bind(
-            searchItemCache: SearchItemCache,
+            selectedItem: SelectedItem,
             index: Int,
-//            onItemClickListener: (searchItem: SearchItemCache, index: Int) -> Unit
         ) {
-            itemName.text = searchItemCache.text
+            itemName.setText(selectedItem.fileName)
+
+//            itemName.setOnClickListener {
+//                // Enable editing when TextView is clicked
+//                itemName.requestFocus()
+//                itemName.setSelection(itemName.text.length)
+//            }
+
+            itemName.setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus) {
+                    val newText = itemName.text.toString()
+                    selectedItem.fileName = newText
+                    items[adapterPosition] = selectedItem
+                }
+            }
+
             removeItemButton.setOnClickListener {
 
                 val position = adapterPosition
@@ -62,9 +77,5 @@ class RecyclerItemWithRemoveOption constructor(
 
     override fun onBindViewHolder(holder: RecyclerItemWithRemoveViewHolder, position: Int) {
         holder.bind(items[position], position)
-//        { item, index ->
-//            Log.d(TAG, "onBindViewHolder: $item @ $index")
-//            onItemClickListener(items[position], position)
-//        }
     }
 }
