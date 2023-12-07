@@ -1,6 +1,7 @@
 package ke.ac.mwaks.fragments
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,6 +26,7 @@ import ke.ac.mwaks.data.local.repo.SearchItemCacheRepository
 import ke.ac.mwaks.data.remote.repo.FilesRepository
 import ke.ac.mwaks.model.FileModel
 import ke.ac.mwaks.model.ListItemWithRemoveOption
+import ke.ac.mwaks.model.SelectedItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,14 +60,12 @@ class Downloads : Fragment() {
 
         val repo =
             SearchItemCacheRepository(AppDatabase.getDB(requireContext()).searchItemCacheDao())
-        var searches = repo.searches.value.toMutableList()
-        adapter = RecyclerItemWithRemoveOption(searches)
-//        { selected, index ->
-//            CoroutineScope(Dispatchers.IO).launch {
-//                repo.deleteSearchItem(selected)
-//                onRemoveAction(index)
-//            }
-//        }
+        var searchItems = mutableListOf<SelectedItem>()
+        var searches = repo.searches.value.forEach {
+
+            searchItems.add(SelectedItem(Uri.EMPTY, it.text))
+        }
+        adapter = RecyclerItemWithRemoveOption(searchItems)
 
         // add search to recent
         search.setOnEditorActionListener { _, actionId, _ ->

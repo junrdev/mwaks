@@ -6,10 +6,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.hardware.camera2.CaptureRequest
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -22,35 +22,51 @@ import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.dhaval2404.imagepicker.ImagePicker
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.storage
 import ke.ac.mwaks.R
+import ke.ac.mwaks.adapter.RecyclerItemWithImageAndRemove
 import ke.ac.mwaks.adapter.RecyclerItemWithRemoveOption
-import ke.ac.mwaks.model.FileModel
-import ke.ac.mwaks.model.ListItemWithRemoveOption
 import ke.ac.mwaks.model.SearchItemCache
+import ke.ac.mwaks.model.SelectedItem
 import ke.ac.mwaks.util.FragmentButtonToActivityClickListener
 import ke.ac.mwaks.util.Methods
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
-import java.security.Permissions
 
 private const val TAG = "Uploads"
 
 class Uploads : Fragment() {
 
     private lateinit var mselectedFilesRecycler: RecyclerView
+    private lateinit var mselectedImagesRecycler: RecyclerView
     private lateinit var mopenCamera: CardView
     private lateinit var mfileUpload: CardView
     private lateinit var mimageUpload: CardView
     private lateinit var muploadButtonTxt: TextView
     private var selectedFiles = mutableListOf<SearchItemCache>()
+    private var selectedImages = mutableListOf<SelectedItem>()
+    private var allItems = mutableListOf<SelectedItem>()
     private lateinit var adapter: RecyclerItemWithRemoveOption
+    private lateinit var imagesAdapter: RecyclerItemWithImageAndRemove
     private var fileList = mutableListOf<File>()
     private lateinit var muploadButton: CardView
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var fragmentButtonToActivityClickListener: FragmentButtonToActivityClickListener
+    private var uploadedFiles = hashMapOf<String, String>()
+
+    private var fileUploadsPath = Firebase.storage.reference.child("uploads/files/")
+    private lateinit var userFiles: DatabaseReference
+    private lateinit var currentUser : FirebaseUser
 
     @SuppressLint("MissingInflatedId", "UseCompatLoadingForDrawables")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -61,6 +77,7 @@ class Uploads : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_uploads, container, false)
         mselectedFilesRecycler = view.findViewById(R.id.selectedFilesRecycler)
+        mselectedImagesRecycler = view.findViewById(R.id.selectedImagesRecycler)
         mopenCamera = view.findViewById(R.id.openCamera)
         mfileUpload = view.findViewById(R.id.fileUpload)
         mimageUpload = view.findViewById(R.id.imageUpload)
@@ -70,53 +87,149 @@ class Uploads : Fragment() {
         mopenCamera.setOnClickListener {
 
             if (checkCameraPermissions() && checkFilePermissions())
-                openCamera()
+                ImagePicker.with(this)
+                    .cameraOnly()
+                    .compress(2048)
+                    .crop()
+                    .saveDir(requireActivity().getExternalFilesDir(Environment.DIRECTORY_ALARMS)!!)
+                    .start()
             else if (!checkCameraPermissions() && checkFilePermissions())
-                ActivityCompat.requestPermissions(requireActivity().parent, arrayOf(Manifest.permission.CAMERA), Methods.CAMERA_PERMISSION_CODE)
+                ActivityCompat.requestPermissions(
+                    requireActivity().parent,
+                    arrayOf(Manifest.permission.CAMERA),
+                    Methods.CAMERA_PERMISSION_CODE
+                )
             else if (checkCameraPermissions() && !checkFilePermissions())
-                ActivityCompat.requestPermissions(requireActivity().parent, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), Methods.FILES_PERMISSION_CODE)
+                ActivityCompat.requestPermissions(
+                    requireActivity().parent,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    Methods.FILES_PERMISSION_CODE
+                )
             else
-                ActivityCompat.requestPermissions(requireActivity().parent, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA), Methods.All_PERMISSION_CODE)
+                ActivityCompat.requestPermissions(
+                    requireActivity().parent,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA),
+                    Methods.All_PERMISSION_CODE
+                )
 
         }
 
         mimageUpload.setOnClickListener {
             if (checkFilePermissions())
-                openImageSelector()
+                ImagePicker.with(this)
+                    .galleryOnly()
+                    .galleryMimeTypes(  //Exclude gif images
+                        mimeTypes = arrayOf("image/png", "image/jpg", "image/webp", "image/jpeg")
+                    )
+                    .compress(2048)
+                    .crop()
+                    .start()
+
         }
         mfileUpload.setOnClickListener {
             if (checkFilePermissions())
                 openFilePicker()
         }
 
+        imagesAdapter = RecyclerItemWithImageAndRemove(requireContext(), selectedImages)
 
         adapter = RecyclerItemWithRemoveOption(
-            items = selectedFiles
+            items = allItems
         )
-//        { item, index ->
-//            Log.d(TAG, "onCreateView: $item $index")
-//            selectedFiles.remove(it)
-//            adapter.notifyItemRemoved()
-//        }
+
+        mselectedImagesRecycler.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        mselectedImagesRecycler.adapter = imagesAdapter
 
         mselectedFilesRecycler.adapter = adapter
         mselectedFilesRecycler.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         if (firebaseAuth.currentUser == null)
-            muploadButtonTxt.setCompoundDrawables(resources.getDrawable(R.drawable.baseline_lock_person_24), null, null, null)
+            muploadButtonTxt.compoundDrawables[0] =
+                resources.getDrawable(R.drawable.baseline_lock_person_24)
+        else {
+            //change upload path
+            val numFiles = allItems.size
+            userFiles = FirebaseDatabase.getInstance().reference.child(firebaseAuth.currentUser!!.uid).child("uploads")
+            currentUser = firebaseAuth.currentUser!!
 
+            muploadButton.setOnClickListener {
+                Log.d(TAG, "onCreateView: ${fileList.toString()}")
+                if (firebaseAuth.currentUser == null) {
+                    fragmentButtonToActivityClickListener.onButtonClicked()
+                } else {
+                    // do uploading
+                    CoroutineScope(Dispatchers.Main).launch {
+                        uploadAllFiles(this)
+                    }.invokeOnCompletion {
+                        if (it?.message != null)
+                            Log.d(TAG, "onCreateView: ${it.message!!}")
+                        else
+                            Toast.makeText(
+                                requireContext(),
+                                "Finished uploading $numFiles files.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    }
 
-        muploadButton.setOnClickListener {
-            Log.d(TAG, "onCreateView: ${fileList.toString()}")
-            if (firebaseAuth.currentUser == null) {
-                fragmentButtonToActivityClickListener.onButtonClicked()
-            } else {
-                // do uploading
+                }
             }
         }
+
         // Inflate the layout for this fragment
         return view
+    }
+
+    private fun uploadAllFiles(context: CoroutineScope) {
+
+        val tasks = hashMapOf<String?, Uri?>()
+
+        context.launch {
+
+            // create tasks
+            for (file in allItems) {
+                val path = file.uri?.let {
+                    context?.let {
+                        Methods.getPathFromUri(file.uri, requireContext())
+                    }
+                }
+
+                tasks.put(
+                    path,
+                    Uri.fromFile(File(path))
+                )
+
+            }
+
+            if (!tasks.isEmpty())
+                for (t in tasks.keys) {
+                    tasks.get(t)?.let { uri ->
+                        fileUploadsPath.putFile(uri).continueWithTask {
+                            if (!it.isSuccessful)
+                                it.exception?.let {
+                                    throw it
+                                }
+                            fileUploadsPath.downloadUrl
+                        }.addOnCompleteListener {
+                            if (it.isSuccessful && it.isComplete) {
+                                val image_or_file_url = it.result
+
+                                if (t != null) {
+                                    uploadedFiles.put(t, image_or_file_url.toString())
+                                }
+                            }
+                        }
+                    }
+                }
+        }.invokeOnCompletion {
+            userFiles.updateChildren(uploadedFiles.toMutableMap() as Map<String, Any>).addOnCompleteListener {
+                selectedFiles.clear()
+                selectedImages.clear()
+                allItems.clear()
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 
     fun openImageSelector() {
@@ -167,16 +280,12 @@ class Uploads : Fragment() {
                 result = it
                 fileName = Methods.getFileName(result, requireActivity())
             }
-        else if (requestCode == Methods.IMAGE_PICK_CODE && resultCode == Activity.RESULT_OK)
-            data?.data?.let {
-                Log.d(TAG, "onActivityResult: Image : $it")
-                result = it
-                fileName = Methods.getFileName(it, requireActivity())
-            }
-        else if (requestCode == Methods.REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK)
+        else if (requestCode == Methods.IMAGE_PICK_CODE && resultCode == Activity.RESULT_OK ||
+            requestCode == Methods.REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK
+        )
             data?.data?.let {
                 Log.d(TAG, "onActivityResult: Camera : $it")
-                result= it
+                result = it
                 fileName = Methods.getFileName(it, requireActivity())
             }
 
@@ -184,10 +293,19 @@ class Uploads : Fragment() {
             Methods.getPathFromUri(result, requireContext())?.let { File(it) }
                 ?.let { fileList.add(it) }
 
-            //check if item is already picked
-            if (selectedFiles.filter { item -> item.text == fileName }.isEmpty()) {
-                selectedFiles.add(SearchItemCache(text = fileName))
-                adapter.notifyItemInserted(selectedFiles.size - 1)
+            if (allItems.filter { item -> item.fileName == fileName }.isEmpty()) {
+                allItems.add(SelectedItem(uri = result, fileName = fileName))
+
+                //check if item is already picked
+                if (selectedFiles.filter { item -> item.text == fileName }
+                        .isEmpty() && requestCode == Methods.FILE_PICK_CODE) {
+                    selectedFiles.add(SearchItemCache(text = fileName))
+                    adapter.notifyItemInserted(selectedFiles.size - 1)
+                } else if (selectedImages.filter { image -> image.fileName == fileName }
+                        .isEmpty() && (requestCode == Methods.IMAGE_PICK_CODE) || (requestCode == Methods.CAMERA_PERMISSION_CODE)) {
+                    selectedImages.add(SelectedItem(fileName = fileName, uri = result))
+                    adapter.notifyItemInserted(selectedFiles.size - 1)
+                }
             } else
                 Toast.makeText(requireContext(), "Item already picked", Toast.LENGTH_SHORT).show()
         }

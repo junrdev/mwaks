@@ -89,7 +89,8 @@ class SignUp : Fragment() {
                             val result = it.result
                             if (!filepath.equals("no_file_selected")) {
                                 val uploadFile = Uri.fromFile(File(filepath))
-                                val uploadTask = usersImagesRef.putFile(uploadFile)
+                                val uploadTask = usersImagesRef.child("profile_pics")
+                                    .child(auth.currentUser!!.uid).putFile(uploadFile)
                                 createUserWithProfilePic(uploadTask, result.user)
                             } else {
                                 createUserWithoutProfilePic(result.user)
@@ -123,6 +124,7 @@ class SignUp : Fragment() {
             if (it.isSuccessful) {
 
                 val dl_url = it.result
+                Log.d(TAG, "createUserWithProfilePic: $dl_url")
 
                 usersImagesRef.metadata.addOnSuccessListener {
                     val appUser = AppUser(
@@ -140,10 +142,13 @@ class SignUp : Fragment() {
                         .setValue(appUser)
                         .addOnCompleteListener {
 
+                            if (!it.isSuccessful) {
+                                fragmentButtonToActivityClickListener.onButtonClicked()
+                            }
 //                            progress.hide()
                             if (it.isComplete) {
-                                if (!it.isSuccessful) {
-                                    fragmentButtonToActivityClickListener.onButtonClicked()
+                                if (it.isSuccessful) {
+
                                 }
                             } else
                                 Toast.makeText(
@@ -200,16 +205,28 @@ class SignUp : Fragment() {
                         fragmentButtonToActivityClickListener.onButtonClicked()
                     } else {
                         auth.signOut()
-                        Toast.makeText(requireContext(), "Failed to succeed with error : ${it.exception!!.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to succeed with error : ${it.exception!!.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
                     auth.signOut()
-                    Toast.makeText(requireContext(), "Failed to complete with error : ${it.exception!!.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Failed to complete with error : ${it.exception!!.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 if (it.isCanceled) {
                     auth.signOut()
 
-                    Toast.makeText(requireContext(), "Cancelled with error : ${it.exception!!.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Cancelled with error : ${it.exception!!.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .addOnFailureListener { e ->
