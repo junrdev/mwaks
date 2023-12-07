@@ -38,7 +38,7 @@ object Methods {
     }
 
     fun openCamera(fragmentActivity: FragmentActivity){
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val intent = Intent(MediaStore.ACTION_PICK_IMAGES_SETTINGS)
         if (intent.resolveActivity(fragmentActivity.packageManager) != null)
             fragmentActivity.startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
     }

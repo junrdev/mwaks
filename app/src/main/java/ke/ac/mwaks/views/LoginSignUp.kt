@@ -23,6 +23,10 @@ import ke.ac.mwaks.fragments.SignIn
 import ke.ac.mwaks.fragments.SignUp
 import ke.ac.mwaks.util.FragmentButtonToActivityClickListener
 import ke.ac.mwaks.util.Methods
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 private const val TAG = "LoginSignUp"
 private lateinit var imageUri: Uri
@@ -58,6 +62,12 @@ class LoginSignUp : AppCompatActivity(), FragmentButtonToActivityClickListener {
 
         val adapter = LoginSignUpPagerAdapter(this)
         viewPager2.adapter = adapter
+
+        CoroutineScope(Dispatchers.Main).launch {
+            viewPager2.beginFakeDrag()
+            delay(1000)
+            viewPager2.endFakeDrag()
+        }
 
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
             when (position) {

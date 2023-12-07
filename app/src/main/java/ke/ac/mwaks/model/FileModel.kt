@@ -7,16 +7,11 @@ import java.util.UUID
 
 data class FileModel @RequiresApi(Build.VERSION_CODES.O) constructor(
     val fileId: String,
-    val fileType: String = FILE_TYPE.PORTABLE_DOCUMENT_FORMAT.extension,
-    val fileDimensions: FileDimensions,
-    val fileName: String = "${
-        UUID.randomUUID().toString().trim().split("-").joinToString()
-    }_${LocalDateTime.now()}",
+    val fileType : String,
+    val fileName: String,
     val fileSize: Double,
-    val iat: LocalDateTime = LocalDateTime.now(),
     val userId: String,
     val downloads: Int = 0,
-    val thumbNail: String,//link to thumbnail
     val numPages : Int = 1
 )
 
