@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -34,7 +35,6 @@ import com.google.firebase.storage.storage
 import ke.ac.mwaks.R
 import ke.ac.mwaks.adapter.RecyclerItemWithImageAndRemove
 import ke.ac.mwaks.adapter.RecyclerItemWithRemoveOption
-import ke.ac.mwaks.model.SearchItemCache
 import ke.ac.mwaks.model.SelectedItem
 import ke.ac.mwaks.util.FragmentButtonToActivityClickListener
 import ke.ac.mwaks.util.Methods
@@ -53,11 +53,13 @@ class Uploads : Fragment() {
     private lateinit var mfileUpload: CardView
     private lateinit var mimageUpload: CardView
     private lateinit var muploadButtonTxt: TextView
-    private var selectedFiles = mutableListOf<SearchItemCache>()
-    private var selectedImages = mutableListOf<SelectedItem>()
+    private var selectedFiles = mutableListOf<SelectedItem>()
     private var allItems = mutableListOf<SelectedItem>()
-    private lateinit var adapter: RecyclerItemWithRemoveOption
+    private lateinit var filesAdapter: RecyclerItemWithRemoveOption
+
     private lateinit var imagesAdapter: RecyclerItemWithImageAndRemove
+    private var selectedImages = mutableListOf<SelectedItem>()
+
     private var fileList = mutableListOf<File>()
     private lateinit var muploadButton: CardView
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -66,7 +68,7 @@ class Uploads : Fragment() {
 
     private var fileUploadsPath = Firebase.storage.reference.child("uploads/files/")
     private lateinit var userFiles: DatabaseReference
-    private lateinit var currentUser : FirebaseUser
+    private lateinit var currentUser: FirebaseUser
 
     @SuppressLint("MissingInflatedId", "UseCompatLoadingForDrawables")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -118,10 +120,14 @@ class Uploads : Fragment() {
             if (checkFilePermissions())
                 ImagePicker.with(this)
                     .galleryOnly()
-                    .galleryMimeTypes(  //Exclude gif images
-                        mimeTypes = arrayOf("image/png", "image/jpg", "image/webp", "image/jpeg")
+                    .galleryMimeTypes(/*Exclude gif images*/ mimeTypes = arrayOf(
+                        "image/png",
+                        "image/jpg",
+                        "image/webp",
+                        "image/jpeg"
                     )
-                    .compress(2048)
+                    )
+                    .compress(2048)//set final maximum size to 2Mb
                     .crop()
                     .start()
 
@@ -131,19 +137,17 @@ class Uploads : Fragment() {
                 openFilePicker()
         }
 
+        //setting the images recycler
         imagesAdapter = RecyclerItemWithImageAndRemove(requireContext(), selectedImages)
-
-        adapter = RecyclerItemWithRemoveOption(
-            items = allItems
-        )
-
         mselectedImagesRecycler.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         mselectedImagesRecycler.adapter = imagesAdapter
 
-        mselectedFilesRecycler.adapter = adapter
-        mselectedFilesRecycler.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+//        filesAdapter = RecyclerItemWithRemoveOption(items = allItems.filter { item -> item.type == "file" }.toMutableList())
+
+//        mselectedFilesRecycler.adapter = filesAdapter
+//        mselectedFilesRecycler.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         if (firebaseAuth.currentUser == null)
             muploadButtonTxt.compoundDrawables[0] =
@@ -151,7 +155,9 @@ class Uploads : Fragment() {
         else {
             //change upload path
             val numFiles = allItems.size
-            userFiles = FirebaseDatabase.getInstance().reference.child(firebaseAuth.currentUser!!.uid).child("uploads")
+            userFiles =
+                FirebaseDatabase.getInstance().reference.child(firebaseAuth.currentUser!!.uid)
+                    .child("uploads")
             currentUser = firebaseAuth.currentUser!!
 
             muploadButton.setOnClickListener {
@@ -169,7 +175,7 @@ class Uploads : Fragment() {
                             Toast.makeText(
                                 requireContext(),
                                 "Finished uploading $numFiles files.",
-                                Toast.LENGTH_SHORT
+                                LENGTH_SHORT
                             ).show()
                     }
 
@@ -223,12 +229,13 @@ class Uploads : Fragment() {
                     }
                 }
         }.invokeOnCompletion {
-            userFiles.updateChildren(uploadedFiles.toMutableMap() as Map<String, Any>).addOnCompleteListener {
-                selectedFiles.clear()
-                selectedImages.clear()
-                allItems.clear()
-                adapter.notifyDataSetChanged()
-            }
+            userFiles.updateChildren(uploadedFiles.toMutableMap() as Map<String, Any>)
+                .addOnCompleteListener {
+                    selectedFiles.clear()
+                    selectedImages.clear()
+                    allItems.clear()
+                    filesAdapter.notifyDataSetChanged()
+                }
         }
     }
 
@@ -242,13 +249,6 @@ class Uploads : Fragment() {
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = "application/pdf"
         startActivityForResult(intent, Methods.FILE_PICK_CODE)
-    }
-
-    fun openCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        intent.resolveActivity(activity?.packageManager!!)?.let {
-            startActivityForResult(intent, Methods.REQUEST_IMAGE_CAPTURE)
-        }
     }
 
     fun checkCameraPermissions(): Boolean {
@@ -272,45 +272,35 @@ class Uploads : Fragment() {
 
         Log.d(TAG, "onActivityResult: $resultCode data : $data")
 
-        var fileName = ""
-        var result: Uri = Uri.EMPTY
+        var fileName: String
+        var result: Uri
 
-        if (requestCode == Methods.FILE_PICK_CODE && resultCode == Activity.RESULT_OK)
-            data?.data?.let {
-                result = it
-                fileName = Methods.getFileName(result, requireActivity())
-            }
-        else if (requestCode == Methods.IMAGE_PICK_CODE && resultCode == Activity.RESULT_OK ||
-            requestCode == Methods.REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK
-        )
-            data?.data?.let {
-                Log.d(TAG, "onActivityResult: Camera : $it")
-                result = it
-                fileName = Methods.getFileName(it, requireActivity())
-            }
+        when (requestCode) {
 
-        if (result != Uri.EMPTY) {
-            Methods.getPathFromUri(result, requireContext())?.let { File(it) }
-                ?.let { fileList.add(it) }
-
-            if (allItems.filter { item -> item.fileName == fileName }.isEmpty()) {
-                allItems.add(SelectedItem(uri = result, fileName = fileName))
-
-                //check if item is already picked
-                if (selectedFiles.filter { item -> item.text == fileName }
-                        .isEmpty() && requestCode == Methods.FILE_PICK_CODE) {
-                    selectedFiles.add(SearchItemCache(text = fileName))
-                    adapter.notifyItemInserted(selectedFiles.size - 1)
-                } else if (selectedImages.filter { image -> image.fileName == fileName }
-                        .isEmpty() && (requestCode == Methods.IMAGE_PICK_CODE) || (requestCode == Methods.CAMERA_PERMISSION_CODE)) {
-                    selectedImages.add(SelectedItem(fileName = fileName, uri = result))
-                    adapter.notifyItemInserted(selectedFiles.size - 1)
+            Methods.FILE_PICK_CODE -> {
+                data?.data?.let { uri ->
+                    result = uri
+                    fileName = Methods.getFileName(result, requireActivity())
                 }
-            } else
-                Toast.makeText(requireContext(), "Item already picked", Toast.LENGTH_SHORT).show()
+            }
+
+            //insert images
+            ImagePicker.REQUEST_CODE -> {
+                data?.data?.let { uri ->
+                    result = uri
+                    fileName = Methods.getFileName(result, requireActivity())
+
+                    selectedImages.add(SelectedItem(uri = uri, fileName = fileName))
+                    imagesAdapter.notifyItemInserted(selectedImages.size - 1)
+
+                }
+
+            }
+
+            else -> throw IllegalStateException("Failed to handle requestcode : $requestCode")
+
         }
 
-        Log.d(TAG, "onActivityResult: $fileList")
     }
 
     override fun onRequestPermissionsResult(

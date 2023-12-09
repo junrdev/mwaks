@@ -62,7 +62,6 @@ class Downloads : Fragment() {
             SearchItemCacheRepository(AppDatabase.getDB(requireContext()).searchItemCacheDao())
         var searchItems = mutableListOf<SelectedItem>()
         var searches = repo.searches.value.forEach {
-
             searchItems.add(SelectedItem(Uri.EMPTY, it.text))
         }
         adapter = RecyclerItemWithRemoveOption(searchItems)

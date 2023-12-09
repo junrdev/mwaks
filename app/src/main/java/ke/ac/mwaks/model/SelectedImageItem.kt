@@ -4,5 +4,6 @@ import android.net.Uri
 
 data class SelectedItem(
     val uri: Uri,
-    var fileName : String ?
+    var fileName : String ?,
+//    var type : String
 )

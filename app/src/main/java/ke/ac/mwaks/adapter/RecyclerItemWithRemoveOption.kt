@@ -34,11 +34,6 @@ class RecyclerItemWithRemoveOption constructor(
         ) {
             itemName.setText(selectedItem.fileName)
 
-//            itemName.setOnClickListener {
-//                // Enable editing when TextView is clicked
-//                itemName.requestFocus()
-//                itemName.setSelection(itemName.text.length)
-//            }
 
             itemName.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
@@ -57,7 +52,6 @@ class RecyclerItemWithRemoveOption constructor(
                     notifyItemRemoved(position)
                 }
 
-//                onItemClickListener(searchItemCache, index)
             }
         }
     }

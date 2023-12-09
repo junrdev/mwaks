@@ -24,6 +24,7 @@ class RecyclerItemWithImageAndRemove(
 
 
         fun bind(selectedItem: SelectedItem) {
+
             //load image with Uri
             Glide.with(context)
                 .load(selectedItem.uri)
@@ -31,11 +32,12 @@ class RecyclerItemWithImageAndRemove(
                 .placeholder(R.drawable.img1)
                 .into(mselectedImageItem)
 
-            mselectedImageItemRemoveButton.setOnClickListener {
-                val position = adapterPosition
-                selectedImages.remove(selectedItem)
-                notifyItemRemoved(position)
-            }
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION)
+                mselectedImageItemRemoveButton.setOnClickListener {
+                    selectedImages.remove(selectedItem)
+                    notifyItemRemoved(position)
+                }
         }
 
     }
