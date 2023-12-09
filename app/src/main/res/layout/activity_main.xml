@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:background="@color/beaver"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -100,8 +101,7 @@
         android:alpha="0.9"
         android:background="@drawable/right_bottom_rounded_corner_shape"
         android:backgroundTint="@color/orange_tint"
-	android:visibility="gone"
-	>
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -110,29 +110,28 @@
             android:padding="5dp">
 
 
-		<ImageView
+            <ImageView
                 android:id="@+id/closeSideView"
                 android:layout_width="30dp"
-	        android:layout_height="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="20dp"
-		android:layout_marginBottom="30dp"
-		app:tint="@color/light_bg"
-		android:layout_marginTop="30dp"
-                android:src="@drawable/round_clear_24" />
+                android:layout_marginBottom="30dp"
+                android:src="@drawable/round_clear_24"
+                app:tint="@color/light_bg" />
 
 
             <LinearLayout
-		android:layout_below="@id/closeSideView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@id/closeSideView"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                   >
+                    android:layout_gravity="center_horizontal">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:layout_width="100dp"
@@ -144,10 +143,9 @@
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/baseline_edit_24"
-                        app:tint="@color/light_bg"
                         android:layout_centerInParent="true"
-                        />
+                        android:src="@drawable/baseline_edit_24"
+                        app:tint="@color/light_bg" />
                 </RelativeLayout>
 
                 <View
@@ -156,10 +154,10 @@
 
 
                 <androidx.cardview.widget.CardView
-                    android:layout_gravity="center_horizontal"
                     android:id="@+id/updateAppButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:layout_margin="5dp"
                     app:cardBackgroundColor="@color/light_grey"
                     app:cardCornerRadius="15dp">
@@ -182,10 +180,10 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_gravity="center_horizontal"
                     android:id="@+id/devOptionsButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:layout_margin="5dp"
                     app:cardBackgroundColor="@color/light_grey"
                     app:cardCornerRadius="15dp">
@@ -208,10 +206,10 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_gravity="center_horizontal"
                     android:id="@+id/reviewsAndComments"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:layout_margin="5dp"
                     app:cardBackgroundColor="@color/light_grey"
                     app:cardCornerRadius="15dp">
